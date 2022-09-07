@@ -8,6 +8,9 @@ A remote administration tool (RAT) may be illegal depending on where you live. C
 ## Why?
 Our main purpose for this RAT is to be used in scenarios with scam call centers.
 
+## Features
+- 
+
 ## Compiling
 ### Requirements
 - Visual Studio 2022
@@ -28,3 +31,4 @@ Our main purpose for this RAT is to be used in scenarios with scam call centers.
 #### Using Git
 1. Open a terminal
 2. Use `git clone https://github.com/Creaous/BoRAT.git`
+
