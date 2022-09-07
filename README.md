@@ -33,3 +33,7 @@ Our main purpose for this RAT is to be used in scenarios with scam call centers.
 1. Open a terminal
 2. Use `git clone https://github.com/Creaous/BoRAT.git`
 
+### Building
+1. Open the .sln file.
+2. Restore NuGet packages.
+3. Click Build > Build Solution
