@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BoRAT.Server
@@ -14,6 +9,7 @@ namespace BoRAT.Server
     public partial class frmRdp : Form
     {
         public Bitmap image;
+
         public frmRdp()
         {
             InitializeComponent();
@@ -33,31 +29,26 @@ namespace BoRAT.Server
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            while(true)
-            { 
+            while (true)
+            {
                 try
-                { 
-
-                    if(backgroundWorker1.CancellationPending)
+                {
+                    if (backgroundWorker1.CancellationPending)
                     {
                         e.Cancel = true;
                         return;
                     }
-                    if (image != null)
-                    {
-                        pictureBox1.Invoke((MethodInvoker)delegate
-                       {
-                           pictureBox1.Image = image;
 
-                       });
-                    }
+                    if (image != null)
+                        pictureBox1.Invoke((MethodInvoker)delegate { pictureBox1.Image = image; });
 
                     Thread.Sleep(1000);
                 }
                 catch (Exception)
                 {
+                }
 
-                };
+                ;
             }
         }
 
@@ -68,7 +59,6 @@ namespace BoRAT.Server
 
         private void frmRdp_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

