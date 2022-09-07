@@ -1,139 +1,172 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<doc>
-  <assembly>
-    <name>System.Reflection.Metadata</name>
-  </assembly>
-  <members>
-    <member name="T:System.Reflection.AssemblyFlags" />
-    <member name="F:System.Reflection.AssemblyFlags.ContentTypeMask">
-      <summary>Content type masked bits that correspond to values of <see cref="T:System.Reflection.AssemblyContentType" />.</summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyFlags.DisableJitCompileOptimizer">
-      <summary>Just-In-Time (JIT) compiler optimization is disabled for the assembly.</summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyFlags.EnableJitCompileTracking">
-      <summary>Just-In-Time (JIT) compiler tracking is enabled for the assembly.</summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyFlags.PublicKey">
-      <summary>The assembly reference holds the full (unhashed) public key. Not applicable on assembly definition.</summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyFlags.Retargetable">
-      <summary>The implementation of the referenced assembly used at runtime is not expected to match the version seen at compile time.</summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyFlags.WindowsRuntime">
-      <summary>The assembly contains Windows Runtime code.</summary>
-    </member>
-    <member name="T:System.Reflection.AssemblyHashAlgorithm">
-      <summary>Specifies the hash algorithms used for hashing assembly files and for generating the strong name.</summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyHashAlgorithm.MD5">
-      <summary>
-        <para>Retrieves the MD5 message-digest algorithm.</para>
-        <para>Due to collision problems with MD5, Microsoft recommends SHA256.</para>
-        <para>MD5 was developed by Rivest in 1991. It is basically MD4 with safety-belts and, while it is slightly slower than MD4, it helps provide more security. The algorithm consists of four distinct rounds, which has a slightly different design from that of MD4. Message-digest size, as well as padding requirements, remain the same.</para>
-      </summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyHashAlgorithm.None">
-      <summary>
-        <para>A mask indicating that there is no hash algorithm.</para>
-        <para>If you specify <see cref="F:System.Reflection.AssemblyHashAlgorithm.None" /> for a multi-module assembly, the common language runtime defaults to the SHA1 algorithm, since multi-module assemblies need to generate a hash.</para>
-      </summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyHashAlgorithm.Sha1">
-      <summary>
-        <para>Retrieves a revision of the Secure Hash Algorithm that corrects an unpublished flaw in SHA.</para>
-        <para>Due to collision problems with SHA1, Microsoft recommends SHA256.</para>
-      </summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyHashAlgorithm.Sha256">
-      <summary>Retrieves a version of the Secure Hash Algorithm with a hash size of 256 bits.</summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyHashAlgorithm.Sha384">
-      <summary>Retrieves a version of the Secure Hash Algorithm with a hash size of 384 bits.</summary>
-    </member>
-    <member name="F:System.Reflection.AssemblyHashAlgorithm.Sha512">
-      <summary>Retrieves a version of the Secure Hash Algorithm with a hash size of 512 bits.</summary>
-    </member>
-    <member name="T:System.Reflection.DeclarativeSecurityAction">
-      <summary>Specifies the security actions that can be performed using declarative security.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.Assert">
-      <summary>The calling code can access the resource identified by the current permission object, even if callers higher in the stack have not been granted permission to access the resource.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.Demand">
-      <summary>Check that all callers in the call chain have been granted the specified permission.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.Deny">
-      <summary>Without further checks refuse Demand for the specified permission.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.InheritanceDemand">
-      <summary>The derived class inheriting the class or overriding a method is required to have the specified permission.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.LinkDemand">
-      <summary>Check that the immediate caller has been granted the specified permission.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.None">
-      <summary>No declarative security action.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.PermitOnly">
-      <summary>Without further checks, refuse the demand for all permissions other than those specified.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.RequestMinimum">
-      <summary>Request the minimum permissions required for code to run. This action can only be used within the scope of the assembly.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.RequestOptional">
-      <summary>Request additional permissions that are optional (not required to run). This request implicitly refuses all other permissions not specifically requested. This action can only be used within the scope of the assembly.</summary>
-    </member>
-    <member name="F:System.Reflection.DeclarativeSecurityAction.RequestRefuse">
-      <summary>Request that permissions that might be misused not be granted to the calling code. This action can only be used within the scope of the assembly.</summary>
-    </member>
-    <member name="T:System.Reflection.ManifestResourceAttributes" />
-    <member name="F:System.Reflection.ManifestResourceAttributes.Private">
-      <summary>The resource is not exported from the assembly.</summary>
-    </member>
-    <member name="F:System.Reflection.ManifestResourceAttributes.Public">
-      <summary>The resource is exported from the assembly.</summary>
-    </member>
-    <member name="F:System.Reflection.ManifestResourceAttributes.VisibilityMask">
-      <summary>Masks just the visibility-related attributes.</summary>
-    </member>
-    <member name="T:System.Reflection.Metadata.ArrayShape">
-      <summary>Represents the shape of an array type.</summary>
-    </member>
-    <member name="M:System.Reflection.Metadata.ArrayShape.#ctor(System.Int32,System.Collections.Immutable.ImmutableArray{System.Int32},System.Collections.Immutable.ImmutableArray{System.Int32})">
-      <summary>Initializes a new instance of the <see cref="T:System.Reflection.Metadata.ArrayShape" /> structure.</summary>
-      <param name="rank">The number of dimensions in the array.</param>
-      <param name="sizes">The size of each dimension.</param>
-      <param name="lowerBounds">The lower-bound of each dimension.</param>
-    </member>
-    <member name="P:System.Reflection.Metadata.ArrayShape.LowerBounds">
-      <summary>Gets the lower-bounds of all dimensions. Length may be smaller than rank, in which case the trailing dimensions have unspecified lower bounds.</summary>
-      <returns>An array of lower-bounds.</returns>
-    </member>
-    <member name="P:System.Reflection.Metadata.ArrayShape.Rank">
-      <summary>Gets the number of dimensions in the array.</summary>
-      <returns>The number of dimensions.</returns>
-    </member>
-    <member name="P:System.Reflection.Metadata.ArrayShape.Sizes">
-      <summary>Gets the sizes of all dimensions.</summary>
-      <returns>An array of sizes.</returns>
-    </member>
-    <member name="T:System.Reflection.Metadata.AssemblyDefinition" />
-    <member name="M:System.Reflection.Metadata.AssemblyDefinition.GetAssemblyName" />
-    <member name="M:System.Reflection.Metadata.AssemblyDefinition.GetCustomAttributes" />
-    <member name="M:System.Reflection.Metadata.AssemblyDefinition.GetDeclarativeSecurityAttributes" />
-    <member name="P:System.Reflection.Metadata.AssemblyDefinition.Culture" />
-    <member name="P:System.Reflection.Metadata.AssemblyDefinition.Flags" />
-    <member name="P:System.Reflection.Metadata.AssemblyDefinition.HashAlgorithm" />
-    <member name="P:System.Reflection.Metadata.AssemblyDefinition.Name" />
-    <member name="P:System.Reflection.Metadata.AssemblyDefinition.PublicKey" />
-    <member name="P:System.Reflection.Metadata.AssemblyDefinition.Version" />
-    <member name="T:System.Reflection.Metadata.AssemblyDefinitionHandle" />
-    <member name="M:System.Reflection.Metadata.AssemblyDefinitionHandle.Equals(System.Object)">
-      <param name="obj" />
-    </member>
-    <member name="M:System.Reflection.Metadata.AssemblyDefinitionHandle.Equals(System.Reflection.Metadata.AssemblyDefinitionHandle)">
-      <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-      <param name="other">An object to compare with this object.</param>
-      <returns>
-        <see langword="true" /> if the curr
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="server" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\server.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cropped-1207-410-720032" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cropped-1207-410-720032.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Saoul Stealer Vayne" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Saoul Stealer Vayne.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Custom-Icon-Design-Mono-General-1-Back" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Custom-Icon-Design-Mono-General-1-Back.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Custom-Icon-Design-Mono-General-2-Download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Custom-Icon-Design-Mono-General-2-Download.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Cmd" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cmd.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="720032" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\720032.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background.JPG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Edit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Custom-Icon-Design-Mono-General-4-Upload" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Custom-Icon-Design-Mono-General-4-Upload.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Refresh.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Edit1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icons8-Windows-8-Food-List-Ingredients" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons8-Windows-8-Food-List-Ingredients.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Background2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Background2.JPG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="stub" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\stub.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1256</value>
+  </data>
+  <data name="Icons8-Windows-8-Users-Enter-2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons8-Windows-8-Users-Enter-2.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cropped-150-150-720032" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cropped-150-150-720032.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+</root>

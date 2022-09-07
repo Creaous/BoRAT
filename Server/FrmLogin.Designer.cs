@@ -1,4 +1,4 @@
-﻿namespace Vayne_Rat
+﻿namespace BoRAT.Server
 {
     partial class FrmLogin
     {

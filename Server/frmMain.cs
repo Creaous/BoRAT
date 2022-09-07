@@ -21,7 +21,7 @@ namespace BoRAT.Server
 {
     public partial class frmMain : Form
     {
-        frmRDP fullScreenRdp;
+        frmRdp fullScreenRdp;
         int port { get; set; }
         int bufferSize { get; set; }
         int writeSize = 0;
@@ -696,7 +696,7 @@ namespace BoRAT.Server
 
         private void btnStartRdp_Click(object sender, EventArgs e)
         {
-            fullScreenRdp = new frmRDP();
+            fullScreenRdp = new frmRdp();
             fullScreen = false;
             isImage = true;
             sendCmdToTarget("rdpStart");

