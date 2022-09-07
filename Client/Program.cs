@@ -13,12 +13,18 @@ namespace BoRAT.Client
         [STAThread]
         private static void Main()
         {
-            Console.WriteLine("hi");
-
-            Process[] processes = System.Diagnostics.Process.GetProcessesByName(
+            Process[] processes = Process.GetProcessesByName(
                 System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
 
-            Console.WriteLine(processes);
+            int currentPID = Process.GetCurrentProcess().Id;
+
+            foreach (Process pr in processes)
+            {
+                if (pr.Id != currentPID)
+                {
+                    pr.Kill();
+                }
+            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
