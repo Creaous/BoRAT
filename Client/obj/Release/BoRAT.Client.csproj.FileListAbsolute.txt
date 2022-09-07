@@ -1,0 +1,11 @@
+Z:\Repos\BoRAT\Client\bin\Release\SearchHost.exe.config
+Z:\Repos\BoRAT\Client\bin\Release\SearchHost.exe
+Z:\Repos\BoRAT\Client\bin\Release\SearchHost.pdb
+Z:\Repos\BoRAT\Client\obj\Release\BoRAT.Client.csproj.AssemblyReference.cache
+Z:\Repos\BoRAT\Client\obj\Release\BoRAT.Client.csproj.SuggestedBindingRedirects.cache
+Z:\Repos\BoRAT\Client\obj\Release\BoRAT.Client.frmMain.resources
+Z:\Repos\BoRAT\Client\obj\Release\BoRAT.Client.Properties.Resources.resources
+Z:\Repos\BoRAT\Client\obj\Release\BoRAT.Client.csproj.GenerateResource.cache
+Z:\Repos\BoRAT\Client\obj\Release\BoRAT.Client.csproj.CoreCompileInputs.cache
+Z:\Repos\BoRAT\Client\obj\Release\SearchHost.exe
+Z:\Repos\BoRAT\Client\obj\Release\SearchHost.pdb

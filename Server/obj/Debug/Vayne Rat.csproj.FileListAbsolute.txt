@@ -1,0 +1,33 @@
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Vayne Rat.exe.config
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Vayne Rat.exe
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Vayne Rat.pdb
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Mono.Cecil.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Mono.Cecil.Mdb.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Mono.Cecil.Pdb.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Mono.Cecil.Rocks.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Buffers.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Collections.Immutable.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Memory.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Numerics.Vectors.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Reflection.Metadata.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Mono.Cecil.pdb
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Mono.Cecil.Mdb.pdb
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Mono.Cecil.Pdb.pdb
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\Mono.Cecil.Rocks.pdb
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Buffers.xml
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Collections.Immutable.xml
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Memory.xml
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Numerics.Vectors.xml
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Reflection.Metadata.xml
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne Rat.csproj.AssemblyReference.cache
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne Rat.csproj.SuggestedBindingRedirects.cache
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne_Rat.FrmMain.resources
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne_Rat.FrmRdp.resources
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne_Rat.Properties.Resources.resources
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne Rat.csproj.GenerateResource.cache
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne Rat.csproj.CoreCompileInputs.cache
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne Rat.csproj.CopyComplete
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne Rat.exe
+Z:\Repos\Vayne-RaT-master\Vayne Rat\Vayne Rat\obj\Debug\Vayne Rat.pdb
