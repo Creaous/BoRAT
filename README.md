@@ -1,6 +1,7 @@
 # BoRAT
 An open-source remote administration tool
 ##### We are not related with the similar RAT also called BoRAT
+##### Originally [Vayne RaT](https://github.com/TheM4hd1/Vayne-RaT)
 
 ## Warning
 A remote administration tool (RAT) may be illegal depending on where you live. Check your laws first before using this program. Ethically you should disclose that you are putting a RAT on someones computer for whatever reason. Please consult a lawyer first.
