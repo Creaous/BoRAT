@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace BoRAT.Client
@@ -13,18 +14,14 @@ namespace BoRAT.Client
         [STAThread]
         private static void Main()
         {
-            Process[] processes = Process.GetProcessesByName(
-                System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
+            var processes = Process.GetProcessesByName(
+                Path.GetFileNameWithoutExtension(Assembly.GetEntryAssembly().Location));
 
-            int currentPID = Process.GetCurrentProcess().Id;
+            var currentPID = Process.GetCurrentProcess().Id;
 
-            foreach (Process pr in processes)
-            {
+            foreach (var pr in processes)
                 if (pr.Id != currentPID)
-                {
                     pr.Kill();
-                }
-            }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -106,11 +106,11 @@ namespace BoRAT.Server
 
         private void setPanel(object sender)
         {
-            PanelClients.Visible = false;
+            /* PanelClients.Visible = false;
             PanelCmd.Visible = false;
             PanelFileManager.Visible = false;
             PanelRdp.Visible = false;
-            ((Panel)sender).Visible = true;
+            ((Panel)sender).Visible = true; */
         }
 
         private void btnListen_Click(object sender, EventArgs e)
@@ -728,6 +728,10 @@ namespace BoRAT.Server
         private void bunifuCustomLabel2_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
         }
     }
 }

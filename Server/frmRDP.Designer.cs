@@ -59,11 +59,12 @@ namespace BoRAT.Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(491, 344);
             this.Controls.Add(this.pictureBox1);
             this.Name = "frmRdp";
-            this.Text = "BoRAT | Rdp Viewer";
+            this.ShowIcon = false;
+            this.Text = "BoRAT | Remote Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmRdp_FormClosing);
             this.Load += new System.EventHandler(this.frmRdp_Load);
             this.Shown += new System.EventHandler(this.FrmRdp_Shown);

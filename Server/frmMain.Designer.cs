@@ -29,14 +29,6 @@ namespace BoRAT.Server
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-            this.PanelMenu = new System.Windows.Forms.Panel();
-            this.btnRdp = new System.Windows.Forms.Button();
-            this.btnCmd = new System.Windows.Forms.Button();
-            this.btnFileManager = new System.Windows.Forms.Button();
-            this.btnClients = new System.Windows.Forms.Button();
-            this.PanelDashboard = new System.Windows.Forms.Panel();
-            this.bunifuCustomLabel1 = new System.Windows.Forms.Label();
             this.MenuClients = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runCmdShellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,16 +85,12 @@ namespace BoRAT.Server
             this.btnBrowse = new System.Windows.Forms.Button();
             this.txtFilePath = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.bunifuCustomLabel2 = new System.Windows.Forms.Label();
             this.PanelRdp = new System.Windows.Forms.Panel();
-            this.lblStatusRdp = new System.Windows.Forms.Label();
-            this.pBRdp = new System.Windows.Forms.PictureBox();
-            this.comboRdp = new System.Windows.Forms.ComboBox();
-            this.btnRdpStop = new System.Windows.Forms.Button();
             this.btnStartRdp = new System.Windows.Forms.Button();
-            this.bunifuCustomLabel3 = new System.Windows.Forms.Label();
-            this.lblVersion = new System.Windows.Forms.Label();
-            this.PanelBar = new System.Windows.Forms.Panel();
+            this.btnRdpStop = new System.Windows.Forms.Button();
+            this.comboRdp = new System.Windows.Forms.ComboBox();
+            this.pBRdp = new System.Windows.Forms.PictureBox();
+            this.lblStatusRdp = new System.Windows.Forms.Label();
             this.lblStatusCmdShell = new System.Windows.Forms.Label();
             this.Logs = new System.Windows.Forms.RichTextBox();
             this.bunifuCustomLabel6 = new System.Windows.Forms.Label();
@@ -117,8 +105,11 @@ namespace BoRAT.Server
             this.bunifuCustomLabel8 = new System.Windows.Forms.Label();
             this.LogsFileManager = new System.Windows.Forms.RichTextBox();
             this.PanelFileManager = new System.Windows.Forms.Panel();
-            this.PanelMenu.SuspendLayout();
-            this.PanelDashboard.SuspendLayout();
+            this.tcMain = new System.Windows.Forms.TabControl();
+            this.tpConnections = new System.Windows.Forms.TabPage();
+            this.tpRemoteShell = new System.Windows.Forms.TabPage();
+            this.tpFileManager = new System.Windows.Forms.TabPage();
+            this.tpRDP = new System.Windows.Forms.TabPage();
             this.MenuClients.SuspendLayout();
             this.MenuFileManager.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -129,128 +120,44 @@ namespace BoRAT.Server
             this.groupBox4.SuspendLayout();
             this.PanelRdp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBRdp)).BeginInit();
-            this.PanelBar.SuspendLayout();
             this.PanelCmd.SuspendLayout();
             this.PanelFileManager.SuspendLayout();
+            this.tcMain.SuspendLayout();
+            this.tpConnections.SuspendLayout();
+            this.tpRemoteShell.SuspendLayout();
+            this.tpFileManager.SuspendLayout();
+            this.tpRDP.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // PanelMenu
-            // 
-            this.PanelMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(81)))), ((int)(((byte)(67)))));
-            this.PanelMenu.Controls.Add(this.btnRdp);
-            this.PanelMenu.Controls.Add(this.btnCmd);
-            this.PanelMenu.Controls.Add(this.btnFileManager);
-            this.PanelMenu.Controls.Add(this.btnClients);
-            this.PanelMenu.Controls.Add(this.PanelDashboard);
-            this.PanelMenu.Dock = System.Windows.Forms.DockStyle.Left;
-            this.PanelMenu.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.PanelMenu.Location = new System.Drawing.Point(0, 0);
-            this.PanelMenu.Name = "PanelMenu";
-            this.PanelMenu.Size = new System.Drawing.Size(172, 410);
-            this.PanelMenu.TabIndex = 0;
-            // 
-            // btnRdp
-            // 
-            this.btnRdp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(81)))), ((int)(((byte)(67)))));
-            this.btnRdp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRdp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.btnRdp.Location = new System.Drawing.Point(3, 139);
-            this.btnRdp.Name = "btnRdp";
-            this.btnRdp.Size = new System.Drawing.Size(166, 28);
-            this.btnRdp.TabIndex = 6;
-            this.btnRdp.Text = "Remote Desktop";
-            this.btnRdp.UseVisualStyleBackColor = false;
-            this.btnRdp.Click += new System.EventHandler(this.btnRdp_Click);
-            // 
-            // btnCmd
-            // 
-            this.btnCmd.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(81)))), ((int)(((byte)(67)))));
-            this.btnCmd.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnCmd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.btnCmd.Location = new System.Drawing.Point(3, 71);
-            this.btnCmd.Name = "btnCmd";
-            this.btnCmd.Size = new System.Drawing.Size(166, 28);
-            this.btnCmd.TabIndex = 5;
-            this.btnCmd.Text = "Cmd Shell";
-            this.btnCmd.UseVisualStyleBackColor = false;
-            this.btnCmd.Click += new System.EventHandler(this.btnCmd_Click);
-            // 
-            // btnFileManager
-            // 
-            this.btnFileManager.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(81)))), ((int)(((byte)(67)))));
-            this.btnFileManager.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnFileManager.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.btnFileManager.Location = new System.Drawing.Point(3, 105);
-            this.btnFileManager.Name = "btnFileManager";
-            this.btnFileManager.Size = new System.Drawing.Size(166, 28);
-            this.btnFileManager.TabIndex = 4;
-            this.btnFileManager.Text = "File Manager";
-            this.btnFileManager.UseVisualStyleBackColor = false;
-            this.btnFileManager.Click += new System.EventHandler(this.btnFileManager_Click);
-            // 
-            // btnClients
-            // 
-            this.btnClients.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(81)))), ((int)(((byte)(67)))));
-            this.btnClients.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnClients.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.btnClients.Location = new System.Drawing.Point(3, 37);
-            this.btnClients.Name = "btnClients";
-            this.btnClients.Size = new System.Drawing.Size(166, 28);
-            this.btnClients.TabIndex = 2;
-            this.btnClients.Text = "Clients";
-            this.btnClients.UseVisualStyleBackColor = false;
-            this.btnClients.Click += new System.EventHandler(this.btnClients_Click);
-            // 
-            // PanelDashboard
-            // 
-            this.PanelDashboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.PanelDashboard.Controls.Add(this.bunifuCustomLabel1);
-            this.PanelDashboard.Dock = System.Windows.Forms.DockStyle.Top;
-            this.PanelDashboard.Location = new System.Drawing.Point(0, 0);
-            this.PanelDashboard.Name = "PanelDashboard";
-            this.PanelDashboard.Size = new System.Drawing.Size(172, 31);
-            this.PanelDashboard.TabIndex = 2;
-            // 
-            // bunifuCustomLabel1
-            // 
-            this.bunifuCustomLabel1.AutoSize = true;
-            this.bunifuCustomLabel1.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bunifuCustomLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
-            this.bunifuCustomLabel1.Location = new System.Drawing.Point(47, 9);
-            this.bunifuCustomLabel1.Name = "bunifuCustomLabel1";
-            this.bunifuCustomLabel1.Size = new System.Drawing.Size(78, 14);
-            this.bunifuCustomLabel1.TabIndex = 2;
-            this.bunifuCustomLabel1.Text = "Dashboard";
-            this.bunifuCustomLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MenuClients
             // 
-            this.MenuClients.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
+            this.MenuClients.BackColor = System.Drawing.SystemColors.Control;
             this.MenuClients.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MenuClients.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectToolStripMenuItem,
             this.runCmdShellToolStripMenuItem});
             this.MenuClients.Name = "MenuClients";
-            this.MenuClients.Size = new System.Drawing.Size(165, 48);
+            this.MenuClients.Size = new System.Drawing.Size(185, 70);
             // 
             // selectToolStripMenuItem
             // 
+            this.selectToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
             this.selectToolStripMenuItem.Name = "selectToolStripMenuItem";
-            this.selectToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.selectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectToolStripMenuItem.Text = "Select";
             this.selectToolStripMenuItem.Click += new System.EventHandler(this.selectToolStripMenuItem_Click);
             // 
             // runCmdShellToolStripMenuItem
             // 
-            this.runCmdShellToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("runCmdShellToolStripMenuItem.Image")));
+            this.runCmdShellToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
             this.runCmdShellToolStripMenuItem.Name = "runCmdShellToolStripMenuItem";
-            this.runCmdShellToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.runCmdShellToolStripMenuItem.Text = "Run Cmd Shell";
+            this.runCmdShellToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.runCmdShellToolStripMenuItem.Text = "Run Remote Shell";
             this.runCmdShellToolStripMenuItem.Click += new System.EventHandler(this.runCmdShellToolStripMenuItem_Click);
             // 
             // MenuFileManager
             // 
-            this.MenuFileManager.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
+            this.MenuFileManager.BackColor = System.Drawing.SystemColors.Control;
             this.MenuFileManager.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MenuFileManager.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.drivesListToolStripMenuItem,
@@ -356,7 +263,7 @@ namespace BoRAT.Server
             this.groupBox3.Controls.Add(this.comboEPath);
             this.groupBox3.Controls.Add(this.label12);
             this.groupBox3.Controls.Add(this.label13);
-            this.groupBox3.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.Location = new System.Drawing.Point(18, 54);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(974, 261);
@@ -371,7 +278,7 @@ namespace BoRAT.Server
             this.lblStatusSTCrypter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
             this.lblStatusSTCrypter.Location = new System.Drawing.Point(670, 22);
             this.lblStatusSTCrypter.Name = "lblStatusSTCrypter";
-            this.lblStatusSTCrypter.Size = new System.Drawing.Size(107, 15);
+            this.lblStatusSTCrypter.Size = new System.Drawing.Size(115, 16);
             this.lblStatusSTCrypter.TabIndex = 18;
             this.lblStatusSTCrypter.Text = "Crypter Status: -";
             // 
@@ -406,7 +313,7 @@ namespace BoRAT.Server
             this.rbExclamation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
             this.rbExclamation.Location = new System.Drawing.Point(230, 125);
             this.rbExclamation.Name = "rbExclamation";
-            this.rbExclamation.Size = new System.Drawing.Size(94, 17);
+            this.rbExclamation.Size = new System.Drawing.Size(100, 18);
             this.rbExclamation.TabIndex = 5;
             this.rbExclamation.TabStop = true;
             this.rbExclamation.Text = "Exclamation";
@@ -419,7 +326,7 @@ namespace BoRAT.Server
             this.rbInformation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
             this.rbInformation.Location = new System.Drawing.Point(109, 125);
             this.rbInformation.Name = "rbInformation";
-            this.rbInformation.Size = new System.Drawing.Size(92, 17);
+            this.rbInformation.Size = new System.Drawing.Size(98, 18);
             this.rbInformation.TabIndex = 4;
             this.rbInformation.TabStop = true;
             this.rbInformation.Text = "Information";
@@ -431,7 +338,7 @@ namespace BoRAT.Server
             this.rbError.Enabled = false;
             this.rbError.Location = new System.Drawing.Point(28, 125);
             this.rbError.Name = "rbError";
-            this.rbError.Size = new System.Drawing.Size(54, 17);
+            this.rbError.Size = new System.Drawing.Size(56, 18);
             this.rbError.TabIndex = 3;
             this.rbError.TabStop = true;
             this.rbError.Text = "Error";
@@ -458,7 +365,7 @@ namespace BoRAT.Server
             this.txtMTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
             this.txtMTitle.Location = new System.Drawing.Point(24, 43);
             this.txtMTitle.Name = "txtMTitle";
-            this.txtMTitle.Size = new System.Drawing.Size(300, 21);
+            this.txtMTitle.Size = new System.Drawing.Size(300, 22);
             this.txtMTitle.TabIndex = 1;
             this.txtMTitle.Text = "Microsoft";
             this.txtMTitle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -476,7 +383,7 @@ namespace BoRAT.Server
             this.rbManaged.Checked = true;
             this.rbManaged.Location = new System.Drawing.Point(166, 118);
             this.rbManaged.Name = "rbManaged";
-            this.rbManaged.Size = new System.Drawing.Size(130, 17);
+            this.rbManaged.Size = new System.Drawing.Size(142, 18);
             this.rbManaged.TabIndex = 26;
             this.rbManaged.TabStop = true;
             this.rbManaged.Text = "Managed resource";
@@ -488,7 +395,7 @@ namespace BoRAT.Server
             this.rbNative.Enabled = false;
             this.rbNative.Location = new System.Drawing.Point(22, 118);
             this.rbNative.Name = "rbNative";
-            this.rbNative.Size = new System.Drawing.Size(115, 17);
+            this.rbNative.Size = new System.Drawing.Size(124, 18);
             this.rbNative.TabIndex = 25;
             this.rbNative.Text = "Native resource";
             this.rbNative.UseVisualStyleBackColor = true;
@@ -498,7 +405,7 @@ namespace BoRAT.Server
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(11, 99);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(104, 13);
+            this.label16.Size = new System.Drawing.Size(114, 14);
             this.label16.TabIndex = 24;
             this.label16.Text = "Storage method:";
             // 
@@ -508,7 +415,7 @@ namespace BoRAT.Server
             this.txtEKey.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
             this.txtEKey.Location = new System.Drawing.Point(121, 168);
             this.txtEKey.Name = "txtEKey";
-            this.txtEKey.Size = new System.Drawing.Size(151, 21);
+            this.txtEKey.Size = new System.Drawing.Size(151, 22);
             this.txtEKey.TabIndex = 23;
             // 
             // label15
@@ -516,7 +423,7 @@ namespace BoRAT.Server
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(6, 169);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(98, 13);
+            this.label15.Size = new System.Drawing.Size(105, 14);
             this.label15.TabIndex = 22;
             this.label15.Text = "Encryption Key:";
             // 
@@ -532,7 +439,7 @@ namespace BoRAT.Server
             this.chRName.AutoSize = true;
             this.chRName.Location = new System.Drawing.Point(9, 72);
             this.chRName.Name = "chRName";
-            this.chRName.Size = new System.Drawing.Size(205, 17);
+            this.chRName.Size = new System.Drawing.Size(218, 18);
             this.chRName.TabIndex = 21;
             this.chRName.Text = "Random Name ( If Dupilcated )";
             this.chRName.UseVisualStyleBackColor = true;
@@ -542,7 +449,7 @@ namespace BoRAT.Server
             this.chHide.AutoSize = true;
             this.chHide.Location = new System.Drawing.Point(9, 49);
             this.chHide.Name = "chHide";
-            this.chHide.Size = new System.Drawing.Size(51, 17);
+            this.chHide.Size = new System.Drawing.Size(54, 18);
             this.chHide.TabIndex = 1;
             this.chHide.Text = "Hide";
             this.chHide.UseVisualStyleBackColor = true;
@@ -562,7 +469,7 @@ namespace BoRAT.Server
             this.chStartup.AutoSize = true;
             this.chStartup.Location = new System.Drawing.Point(9, 26);
             this.chStartup.Name = "chStartup";
-            this.chStartup.Size = new System.Drawing.Size(111, 17);
+            this.chStartup.Size = new System.Drawing.Size(119, 18);
             this.chStartup.TabIndex = 0;
             this.chStartup.Text = "Add To Startup";
             this.chStartup.UseVisualStyleBackColor = true;
@@ -579,7 +486,7 @@ namespace BoRAT.Server
             "%CurrentPath%"});
             this.comboEPath.Location = new System.Drawing.Point(121, 143);
             this.comboEPath.Name = "comboEPath";
-            this.comboEPath.Size = new System.Drawing.Size(177, 21);
+            this.comboEPath.Size = new System.Drawing.Size(177, 22);
             this.comboEPath.TabIndex = 4;
             this.comboEPath.Text = "Select";
             // 
@@ -588,7 +495,7 @@ namespace BoRAT.Server
             this.label12.AutoSize = true;
             this.label12.Location = new System.Drawing.Point(6, 209);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(32, 13);
+            this.label12.Size = new System.Drawing.Size(34, 14);
             this.label12.TabIndex = 6;
             this.label12.Text = "Icon";
             // 
@@ -597,36 +504,39 @@ namespace BoRAT.Server
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(6, 144);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(91, 13);
+            this.label13.Size = new System.Drawing.Size(101, 14);
             this.label13.TabIndex = 3;
             this.label13.Text = "Execution Path";
             // 
             // PanelClients
             // 
+            this.PanelClients.BackColor = System.Drawing.Color.Transparent;
             this.PanelClients.Controls.Add(this.lblStatus);
             this.PanelClients.Controls.Add(this.listClients);
             this.PanelClients.Controls.Add(this.bunifuCustomLabel4);
             this.PanelClients.Controls.Add(this.btnListen);
             this.PanelClients.Controls.Add(this.Nport);
-            this.PanelClients.Location = new System.Drawing.Point(173, 31);
+            this.PanelClients.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelClients.ForeColor = System.Drawing.Color.Black;
+            this.PanelClients.Location = new System.Drawing.Point(3, 3);
             this.PanelClients.Name = "PanelClients";
-            this.PanelClients.Size = new System.Drawing.Size(1033, 378);
+            this.PanelClients.Size = new System.Drawing.Size(960, 414);
             this.PanelClients.TabIndex = 9;
-            this.PanelClients.Visible = false;
             // 
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.lblStatus.Location = new System.Drawing.Point(6, 330);
+            this.lblStatus.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblStatus.ForeColor = System.Drawing.Color.Black;
+            this.lblStatus.Location = new System.Drawing.Point(3, 397);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(173, 13);
+            this.lblStatus.Size = new System.Drawing.Size(160, 15);
             this.lblStatus.TabIndex = 7;
             this.lblStatus.Text = "Status: Idle | Connections: 0";
             // 
             // listClients
             // 
-            this.listClients.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
+            this.listClients.BackColor = System.Drawing.SystemColors.Control;
             this.listClients.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
@@ -634,12 +544,12 @@ namespace BoRAT.Server
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader10});
-            this.listClients.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listClients.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
+            this.listClients.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listClients.ForeColor = System.Drawing.Color.Black;
             this.listClients.HideSelection = false;
-            this.listClients.Location = new System.Drawing.Point(6, 55);
+            this.listClients.Location = new System.Drawing.Point(3, 52);
             this.listClients.Name = "listClients";
-            this.listClients.Size = new System.Drawing.Size(1000, 261);
+            this.listClients.Size = new System.Drawing.Size(949, 342);
             this.listClients.TabIndex = 6;
             this.listClients.UseCompatibleStateImageBehavior = false;
             this.listClients.View = System.Windows.Forms.View.Details;
@@ -648,12 +558,12 @@ namespace BoRAT.Server
             // columnHeader1
             // 
             this.columnHeader1.Text = "ID";
-            this.columnHeader1.Width = 30;
+            this.columnHeader1.Width = 45;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Public IP-Address";
-            this.columnHeader2.Width = 130;
+            this.columnHeader2.Width = 180;
             // 
             // columnHeader3
             // 
@@ -663,53 +573,62 @@ namespace BoRAT.Server
             // columnHeader4
             // 
             this.columnHeader4.Text = "OS";
-            this.columnHeader4.Width = 200;
+            this.columnHeader4.Width = 150;
             // 
             // columnHeader5
             // 
             this.columnHeader5.Text = "Security System";
-            this.columnHeader5.Width = 260;
+            this.columnHeader5.Width = 200;
             // 
             // columnHeader10
             // 
             this.columnHeader10.Text = "Date/Time";
-            this.columnHeader10.Width = 176;
+            this.columnHeader10.Width = 170;
             // 
             // bunifuCustomLabel4
             // 
             this.bunifuCustomLabel4.AutoSize = true;
-            this.bunifuCustomLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.bunifuCustomLabel4.Location = new System.Drawing.Point(3, 12);
+            this.bunifuCustomLabel4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.bunifuCustomLabel4.ForeColor = System.Drawing.Color.Black;
+            this.bunifuCustomLabel4.Location = new System.Drawing.Point(5, 5);
             this.bunifuCustomLabel4.Name = "bunifuCustomLabel4";
-            this.bunifuCustomLabel4.Size = new System.Drawing.Size(35, 13);
+            this.bunifuCustomLabel4.Size = new System.Drawing.Size(34, 15);
             this.bunifuCustomLabel4.TabIndex = 3;
             this.bunifuCustomLabel4.Text = "Port:";
             // 
             // btnListen
             // 
+            this.btnListen.BackColor = System.Drawing.Color.Moccasin;
             this.btnListen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnListen.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.btnListen.Location = new System.Drawing.Point(137, 28);
+            this.btnListen.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnListen.ForeColor = System.Drawing.Color.Black;
+            this.btnListen.Location = new System.Drawing.Point(139, 21);
             this.btnListen.Name = "btnListen";
-            this.btnListen.Size = new System.Drawing.Size(88, 23);
+            this.btnListen.Size = new System.Drawing.Size(88, 25);
             this.btnListen.TabIndex = 5;
             this.btnListen.Text = "Listen";
-            this.btnListen.UseVisualStyleBackColor = true;
+            this.btnListen.UseVisualStyleBackColor = false;
             this.btnListen.Click += new System.EventHandler(this.btnListen_Click);
             // 
             // Nport
             // 
-            this.Nport.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
-            this.Nport.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.Nport.Location = new System.Drawing.Point(6, 28);
+            this.Nport.BackColor = System.Drawing.SystemColors.Control;
+            this.Nport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.Nport.ForeColor = System.Drawing.Color.Black;
+            this.Nport.Location = new System.Drawing.Point(8, 23);
             this.Nport.Maximum = new decimal(new int[] {
             69420,
             0,
             0,
             0});
             this.Nport.Name = "Nport";
-            this.Nport.Size = new System.Drawing.Size(125, 21);
+            this.Nport.Size = new System.Drawing.Size(125, 23);
             this.Nport.TabIndex = 4;
+            this.Nport.Value = new decimal(new int[] {
+            666,
+            0,
+            0,
+            0});
             // 
             // btnEncrypt
             // 
@@ -757,17 +676,6 @@ namespace BoRAT.Server
             this.label8.TabIndex = 0;
             this.label8.Text = "File:";
             // 
-            // bunifuCustomLabel2
-            // 
-            this.bunifuCustomLabel2.AutoSize = true;
-            this.bunifuCustomLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.bunifuCustomLabel2.Location = new System.Drawing.Point(996, 9);
-            this.bunifuCustomLabel2.Name = "bunifuCustomLabel2";
-            this.bunifuCustomLabel2.Size = new System.Drawing.Size(14, 13);
-            this.bunifuCustomLabel2.TabIndex = 0;
-            this.bunifuCustomLabel2.Text = "x";
-            this.bunifuCustomLabel2.Click += new System.EventHandler(this.bunifuCustomLabel2_Click);
-            // 
             // PanelRdp
             // 
             this.PanelRdp.Controls.Add(this.btnStartRdp);
@@ -775,147 +683,118 @@ namespace BoRAT.Server
             this.PanelRdp.Controls.Add(this.comboRdp);
             this.PanelRdp.Controls.Add(this.pBRdp);
             this.PanelRdp.Controls.Add(this.lblStatusRdp);
-            this.PanelRdp.Location = new System.Drawing.Point(173, 31);
+            this.PanelRdp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelRdp.Location = new System.Drawing.Point(3, 3);
             this.PanelRdp.Name = "PanelRdp";
-            this.PanelRdp.Size = new System.Drawing.Size(1033, 378);
+            this.PanelRdp.Size = new System.Drawing.Size(960, 414);
             this.PanelRdp.TabIndex = 12;
-            this.PanelRdp.Visible = false;
             // 
-            // lblStatusRdp
+            // btnStartRdp
             // 
-            this.lblStatusRdp.AutoSize = true;
-            this.lblStatusRdp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.lblStatusRdp.Location = new System.Drawing.Point(6, 12);
-            this.lblStatusRdp.Name = "lblStatusRdp";
-            this.lblStatusRdp.Size = new System.Drawing.Size(182, 26);
-            this.lblStatusRdp.TabIndex = 5;
-            this.lblStatusRdp.Text = "Connection: No Active Session\r\nUsername: -";
+            this.btnStartRdp.BackColor = System.Drawing.Color.Moccasin;
+            this.btnStartRdp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStartRdp.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnStartRdp.ForeColor = System.Drawing.Color.Black;
+            this.btnStartRdp.Location = new System.Drawing.Point(6, 39);
+            this.btnStartRdp.Name = "btnStartRdp";
+            this.btnStartRdp.Size = new System.Drawing.Size(82, 29);
+            this.btnStartRdp.TabIndex = 10;
+            this.btnStartRdp.Text = "Start";
+            this.btnStartRdp.UseVisualStyleBackColor = false;
+            this.btnStartRdp.Click += new System.EventHandler(this.btnStartRdp_Click);
             // 
-            // pBRdp
+            // btnRdpStop
             // 
-            this.pBRdp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pBRdp.Location = new System.Drawing.Point(191, 12);
-            this.pBRdp.Name = "pBRdp";
-            this.pBRdp.Size = new System.Drawing.Size(815, 350);
-            this.pBRdp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pBRdp.TabIndex = 6;
-            this.pBRdp.TabStop = false;
+            this.btnRdpStop.BackColor = System.Drawing.Color.Moccasin;
+            this.btnRdpStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRdpStop.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.btnRdpStop.ForeColor = System.Drawing.Color.Black;
+            this.btnRdpStop.Location = new System.Drawing.Point(98, 39);
+            this.btnRdpStop.Name = "btnRdpStop";
+            this.btnRdpStop.Size = new System.Drawing.Size(82, 30);
+            this.btnRdpStop.TabIndex = 9;
+            this.btnRdpStop.Text = "Pause";
+            this.btnRdpStop.UseVisualStyleBackColor = false;
+            this.btnRdpStop.Click += new System.EventHandler(this.btnRdpStop_Click);
             // 
             // comboRdp
             // 
-            this.comboRdp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
-            this.comboRdp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
+            this.comboRdp.BackColor = System.Drawing.SystemColors.Control;
+            this.comboRdp.ForeColor = System.Drawing.Color.Black;
             this.comboRdp.FormattingEnabled = true;
             this.comboRdp.Items.AddRange(new object[] {
             "ZoomScreen",
             "CenterImage",
             "AutoSize",
             "FullScreen"});
-            this.comboRdp.Location = new System.Drawing.Point(11, 83);
+            this.comboRdp.Location = new System.Drawing.Point(6, 75);
             this.comboRdp.Name = "comboRdp";
-            this.comboRdp.Size = new System.Drawing.Size(170, 21);
+            this.comboRdp.Size = new System.Drawing.Size(174, 23);
             this.comboRdp.TabIndex = 6;
             this.comboRdp.Text = "Screen Size Mode";
             this.comboRdp.SelectedIndexChanged += new System.EventHandler(this.comboRdp_SelectedIndexChanged);
             // 
-            // btnRdpStop
+            // pBRdp
             // 
-            this.btnRdpStop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
-            this.btnRdpStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRdpStop.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.btnRdpStop.Location = new System.Drawing.Point(99, 55);
-            this.btnRdpStop.Name = "btnRdpStop";
-            this.btnRdpStop.Size = new System.Drawing.Size(82, 22);
-            this.btnRdpStop.TabIndex = 9;
-            this.btnRdpStop.Text = "Pause";
-            this.btnRdpStop.UseVisualStyleBackColor = false;
-            this.btnRdpStop.Click += new System.EventHandler(this.btnRdpStop_Click);
+            this.pBRdp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pBRdp.Location = new System.Drawing.Point(186, 8);
+            this.pBRdp.Name = "pBRdp";
+            this.pBRdp.Size = new System.Drawing.Size(769, 372);
+            this.pBRdp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pBRdp.TabIndex = 6;
+            this.pBRdp.TabStop = false;
             // 
-            // btnStartRdp
+            // lblStatusRdp
             // 
-            this.btnStartRdp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
-            this.btnStartRdp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStartRdp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.btnStartRdp.Location = new System.Drawing.Point(11, 55);
-            this.btnStartRdp.Name = "btnStartRdp";
-            this.btnStartRdp.Size = new System.Drawing.Size(82, 22);
-            this.btnStartRdp.TabIndex = 10;
-            this.btnStartRdp.Text = "Start";
-            this.btnStartRdp.UseVisualStyleBackColor = false;
-            this.btnStartRdp.Click += new System.EventHandler(this.btnStartRdp_Click);
-            // 
-            // bunifuCustomLabel3
-            // 
-            this.bunifuCustomLabel3.AutoSize = true;
-            this.bunifuCustomLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.bunifuCustomLabel3.Location = new System.Drawing.Point(978, 9);
-            this.bunifuCustomLabel3.Name = "bunifuCustomLabel3";
-            this.bunifuCustomLabel3.Size = new System.Drawing.Size(12, 13);
-            this.bunifuCustomLabel3.TabIndex = 1;
-            this.bunifuCustomLabel3.Text = "-";
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.lblVersion.Location = new System.Drawing.Point(382, 9);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(112, 13);
-            this.lblVersion.TabIndex = 2;
-            this.lblVersion.Text = "BoRAT Version 1.0";
-            this.lblVersion.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lblVersion_MouseDown);
-            // 
-            // PanelBar
-            // 
-            this.PanelBar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(81)))), ((int)(((byte)(67)))));
-            this.PanelBar.Controls.Add(this.lblVersion);
-            this.PanelBar.Controls.Add(this.bunifuCustomLabel3);
-            this.PanelBar.Controls.Add(this.bunifuCustomLabel2);
-            this.PanelBar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.PanelBar.Location = new System.Drawing.Point(172, 0);
-            this.PanelBar.Name = "PanelBar";
-            this.PanelBar.Size = new System.Drawing.Size(1035, 31);
-            this.PanelBar.TabIndex = 1;
-            this.PanelBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PanelBar_MouseDown);
+            this.lblStatusRdp.AutoSize = true;
+            this.lblStatusRdp.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblStatusRdp.ForeColor = System.Drawing.Color.Black;
+            this.lblStatusRdp.Location = new System.Drawing.Point(5, 5);
+            this.lblStatusRdp.Name = "lblStatusRdp";
+            this.lblStatusRdp.Size = new System.Drawing.Size(175, 30);
+            this.lblStatusRdp.TabIndex = 5;
+            this.lblStatusRdp.Text = "Connection: No Active Session\r\nUsername: -";
             // 
             // lblStatusCmdShell
             // 
             this.lblStatusCmdShell.AutoSize = true;
-            this.lblStatusCmdShell.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.lblStatusCmdShell.Location = new System.Drawing.Point(6, 12);
+            this.lblStatusCmdShell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblStatusCmdShell.ForeColor = System.Drawing.Color.Black;
+            this.lblStatusCmdShell.Location = new System.Drawing.Point(5, 5);
             this.lblStatusCmdShell.Name = "lblStatusCmdShell";
-            this.lblStatusCmdShell.Size = new System.Drawing.Size(182, 26);
+            this.lblStatusCmdShell.Size = new System.Drawing.Size(175, 30);
             this.lblStatusCmdShell.TabIndex = 3;
             this.lblStatusCmdShell.Text = "Connection: No Active Session\r\nUsername: -";
             // 
             // Logs
             // 
-            this.Logs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
+            this.Logs.BackColor = System.Drawing.SystemColors.Control;
             this.Logs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Logs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.Logs.Location = new System.Drawing.Point(9, 45);
+            this.Logs.Location = new System.Drawing.Point(5, 42);
             this.Logs.Name = "Logs";
-            this.Logs.Size = new System.Drawing.Size(1000, 271);
+            this.Logs.Size = new System.Drawing.Size(947, 318);
             this.Logs.TabIndex = 4;
             this.Logs.Text = "";
             // 
             // bunifuCustomLabel6
             // 
             this.bunifuCustomLabel6.AutoSize = true;
-            this.bunifuCustomLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.bunifuCustomLabel6.Location = new System.Drawing.Point(6, 319);
+            this.bunifuCustomLabel6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.bunifuCustomLabel6.ForeColor = System.Drawing.Color.Black;
+            this.bunifuCustomLabel6.Location = new System.Drawing.Point(5, 363);
             this.bunifuCustomLabel6.Name = "bunifuCustomLabel6";
-            this.bunifuCustomLabel6.Size = new System.Drawing.Size(71, 13);
+            this.bunifuCustomLabel6.Size = new System.Drawing.Size(66, 15);
             this.bunifuCustomLabel6.TabIndex = 5;
             this.bunifuCustomLabel6.Text = "Command:";
             // 
             // txtCommand
             // 
-            this.txtCommand.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
+            this.txtCommand.BackColor = System.Drawing.SystemColors.Control;
             this.txtCommand.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.txtCommand.Location = new System.Drawing.Point(9, 335);
+            this.txtCommand.Location = new System.Drawing.Point(5, 381);
             this.txtCommand.Name = "txtCommand";
-            this.txtCommand.Size = new System.Drawing.Size(1000, 21);
+            this.txtCommand.Size = new System.Drawing.Size(946, 23);
             this.txtCommand.TabIndex = 6;
             this.txtCommand.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCommand_KeyDown);
             // 
@@ -925,16 +804,16 @@ namespace BoRAT.Server
             this.PanelCmd.Controls.Add(this.bunifuCustomLabel6);
             this.PanelCmd.Controls.Add(this.Logs);
             this.PanelCmd.Controls.Add(this.lblStatusCmdShell);
+            this.PanelCmd.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PanelCmd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.PanelCmd.Location = new System.Drawing.Point(173, 31);
+            this.PanelCmd.Location = new System.Drawing.Point(3, 3);
             this.PanelCmd.Name = "PanelCmd";
-            this.PanelCmd.Size = new System.Drawing.Size(1033, 378);
+            this.PanelCmd.Size = new System.Drawing.Size(960, 414);
             this.PanelCmd.TabIndex = 10;
-            this.PanelCmd.Visible = false;
             // 
             // listFileManager
             // 
-            this.listFileManager.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
+            this.listFileManager.BackColor = System.Drawing.SystemColors.Control;
             this.listFileManager.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader6,
             this.columnHeader7,
@@ -944,9 +823,9 @@ namespace BoRAT.Server
             this.listFileManager.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
             this.listFileManager.GridLines = true;
             this.listFileManager.HideSelection = false;
-            this.listFileManager.Location = new System.Drawing.Point(9, 42);
+            this.listFileManager.Location = new System.Drawing.Point(3, 38);
             this.listFileManager.Name = "listFileManager";
-            this.listFileManager.Size = new System.Drawing.Size(1000, 214);
+            this.listFileManager.Size = new System.Drawing.Size(952, 265);
             this.listFileManager.TabIndex = 1;
             this.listFileManager.UseCompatibleStateImageBehavior = false;
             this.listFileManager.View = System.Windows.Forms.View.Details;
@@ -974,31 +853,33 @@ namespace BoRAT.Server
             // lblStatusFileManager
             // 
             this.lblStatusFileManager.AutoSize = true;
-            this.lblStatusFileManager.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.lblStatusFileManager.Location = new System.Drawing.Point(6, 13);
+            this.lblStatusFileManager.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblStatusFileManager.ForeColor = System.Drawing.Color.Black;
+            this.lblStatusFileManager.Location = new System.Drawing.Point(5, 5);
             this.lblStatusFileManager.Name = "lblStatusFileManager";
-            this.lblStatusFileManager.Size = new System.Drawing.Size(182, 26);
+            this.lblStatusFileManager.Size = new System.Drawing.Size(175, 30);
             this.lblStatusFileManager.TabIndex = 4;
             this.lblStatusFileManager.Text = "Connection: No Active Session\r\nUsername: -";
             // 
             // bunifuCustomLabel8
             // 
             this.bunifuCustomLabel8.AutoSize = true;
-            this.bunifuCustomLabel8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.bunifuCustomLabel8.Location = new System.Drawing.Point(8, 259);
+            this.bunifuCustomLabel8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.bunifuCustomLabel8.ForeColor = System.Drawing.Color.Black;
+            this.bunifuCustomLabel8.Location = new System.Drawing.Point(0, 306);
             this.bunifuCustomLabel8.Name = "bunifuCustomLabel8";
-            this.bunifuCustomLabel8.Size = new System.Drawing.Size(112, 13);
+            this.bunifuCustomLabel8.Size = new System.Drawing.Size(109, 15);
             this.bunifuCustomLabel8.TabIndex = 5;
             this.bunifuCustomLabel8.Text = "Activity/Error Log:";
             // 
             // LogsFileManager
             // 
-            this.LogsFileManager.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
+            this.LogsFileManager.BackColor = System.Drawing.SystemColors.Control;
             this.LogsFileManager.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.LogsFileManager.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.LogsFileManager.Location = new System.Drawing.Point(83, 275);
+            this.LogsFileManager.Location = new System.Drawing.Point(5, 324);
             this.LogsFileManager.Name = "LogsFileManager";
-            this.LogsFileManager.Size = new System.Drawing.Size(852, 85);
+            this.LogsFileManager.Size = new System.Drawing.Size(952, 85);
             this.LogsFileManager.TabIndex = 6;
             this.LogsFileManager.Text = "";
             // 
@@ -1008,33 +889,84 @@ namespace BoRAT.Server
             this.PanelFileManager.Controls.Add(this.bunifuCustomLabel8);
             this.PanelFileManager.Controls.Add(this.lblStatusFileManager);
             this.PanelFileManager.Controls.Add(this.listFileManager);
+            this.PanelFileManager.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PanelFileManager.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.PanelFileManager.Location = new System.Drawing.Point(173, 31);
+            this.PanelFileManager.Location = new System.Drawing.Point(3, 3);
             this.PanelFileManager.Name = "PanelFileManager";
-            this.PanelFileManager.Size = new System.Drawing.Size(1033, 378);
+            this.PanelFileManager.Size = new System.Drawing.Size(960, 414);
             this.PanelFileManager.TabIndex = 11;
-            this.PanelFileManager.Visible = false;
+            // 
+            // tcMain
+            // 
+            this.tcMain.Controls.Add(this.tpConnections);
+            this.tcMain.Controls.Add(this.tpRemoteShell);
+            this.tcMain.Controls.Add(this.tpFileManager);
+            this.tcMain.Controls.Add(this.tpRDP);
+            this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tcMain.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.tcMain.Location = new System.Drawing.Point(0, 0);
+            this.tcMain.Name = "tcMain";
+            this.tcMain.SelectedIndex = 0;
+            this.tcMain.Size = new System.Drawing.Size(974, 448);
+            this.tcMain.TabIndex = 7;
+            // 
+            // tpConnections
+            // 
+            this.tpConnections.BackColor = System.Drawing.Color.Transparent;
+            this.tpConnections.Controls.Add(this.PanelClients);
+            this.tpConnections.Location = new System.Drawing.Point(4, 24);
+            this.tpConnections.Name = "tpConnections";
+            this.tpConnections.Padding = new System.Windows.Forms.Padding(3);
+            this.tpConnections.Size = new System.Drawing.Size(966, 420);
+            this.tpConnections.TabIndex = 4;
+            this.tpConnections.Text = "Connections";
+            // 
+            // tpRemoteShell
+            // 
+            this.tpRemoteShell.BackColor = System.Drawing.SystemColors.Control;
+            this.tpRemoteShell.Controls.Add(this.PanelCmd);
+            this.tpRemoteShell.Location = new System.Drawing.Point(4, 24);
+            this.tpRemoteShell.Name = "tpRemoteShell";
+            this.tpRemoteShell.Padding = new System.Windows.Forms.Padding(3);
+            this.tpRemoteShell.Size = new System.Drawing.Size(966, 420);
+            this.tpRemoteShell.TabIndex = 2;
+            this.tpRemoteShell.Text = "Remote Shell";
+            // 
+            // tpFileManager
+            // 
+            this.tpFileManager.BackColor = System.Drawing.SystemColors.Control;
+            this.tpFileManager.Controls.Add(this.PanelFileManager);
+            this.tpFileManager.Location = new System.Drawing.Point(4, 24);
+            this.tpFileManager.Name = "tpFileManager";
+            this.tpFileManager.Padding = new System.Windows.Forms.Padding(3);
+            this.tpFileManager.Size = new System.Drawing.Size(966, 420);
+            this.tpFileManager.TabIndex = 1;
+            this.tpFileManager.Text = "File Manager";
+            // 
+            // tpRDP
+            // 
+            this.tpRDP.BackColor = System.Drawing.SystemColors.Control;
+            this.tpRDP.Controls.Add(this.PanelRdp);
+            this.tpRDP.Location = new System.Drawing.Point(4, 24);
+            this.tpRDP.Name = "tpRDP";
+            this.tpRDP.Padding = new System.Windows.Forms.Padding(3);
+            this.tpRDP.Size = new System.Drawing.Size(966, 420);
+            this.tpRDP.TabIndex = 0;
+            this.tpRDP.Text = "Remote Desktop";
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(54)))), ((int)(((byte)(108)))), ((int)(((byte)(94)))));
-            this.ClientSize = new System.Drawing.Size(1207, 410);
-            this.Controls.Add(this.PanelRdp);
-            this.Controls.Add(this.PanelFileManager);
-            this.Controls.Add(this.PanelCmd);
-            this.Controls.Add(this.PanelClients);
-            this.Controls.Add(this.PanelBar);
-            this.Controls.Add(this.PanelMenu);
-            this.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(974, 448);
+            this.Controls.Add(this.tcMain);
+            this.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ForeColor = System.Drawing.Color.Black;
             this.Name = "frmMain";
-            this.Text = "Vayne Rat";
-            this.PanelMenu.ResumeLayout(false);
-            this.PanelDashboard.ResumeLayout(false);
-            this.PanelDashboard.PerformLayout();
+            this.ShowIcon = false;
+            this.Text = "BoRAT";
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.MenuClients.ResumeLayout(false);
             this.MenuFileManager.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
@@ -1050,25 +982,20 @@ namespace BoRAT.Server
             this.PanelRdp.ResumeLayout(false);
             this.PanelRdp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBRdp)).EndInit();
-            this.PanelBar.ResumeLayout(false);
-            this.PanelBar.PerformLayout();
             this.PanelCmd.ResumeLayout(false);
             this.PanelCmd.PerformLayout();
             this.PanelFileManager.ResumeLayout(false);
             this.PanelFileManager.PerformLayout();
+            this.tcMain.ResumeLayout(false);
+            this.tpConnections.ResumeLayout(false);
+            this.tpRemoteShell.ResumeLayout(false);
+            this.tpFileManager.ResumeLayout(false);
+            this.tpRDP.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel PanelMenu;
-        private System.Windows.Forms.Panel PanelDashboard;
-        private System.Windows.Forms.Button btnClients;
-        private System.Windows.Forms.Label bunifuCustomLabel1;
-        private System.Windows.Forms.Button btnCmd;
-        private System.Windows.Forms.Button btnFileManager;
-        private System.Windows.Forms.Button btnRdp;
         private System.Windows.Forms.ContextMenuStrip MenuClients;
         private System.Windows.Forms.ToolStripMenuItem selectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runCmdShellToolStripMenuItem;
@@ -1125,16 +1052,12 @@ namespace BoRAT.Server
         private System.Windows.Forms.RadioButton rbManaged;
         private System.Windows.Forms.RadioButton rbNative;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.Label bunifuCustomLabel2;
         private System.Windows.Forms.Panel PanelRdp;
         private System.Windows.Forms.Button btnStartRdp;
         private System.Windows.Forms.Button btnRdpStop;
         private System.Windows.Forms.ComboBox comboRdp;
         private System.Windows.Forms.PictureBox pBRdp;
         private System.Windows.Forms.Label lblStatusRdp;
-        private System.Windows.Forms.Label bunifuCustomLabel3;
-        private System.Windows.Forms.Label lblVersion;
-        private System.Windows.Forms.Panel PanelBar;
         private System.Windows.Forms.Label lblStatusCmdShell;
         private System.Windows.Forms.RichTextBox Logs;
         private System.Windows.Forms.Label bunifuCustomLabel6;
@@ -1149,5 +1072,10 @@ namespace BoRAT.Server
         private System.Windows.Forms.Label bunifuCustomLabel8;
         private System.Windows.Forms.RichTextBox LogsFileManager;
         private System.Windows.Forms.Panel PanelFileManager;
+        private System.Windows.Forms.TabControl tcMain;
+        private System.Windows.Forms.TabPage tpRDP;
+        private System.Windows.Forms.TabPage tpFileManager;
+        private System.Windows.Forms.TabPage tpRemoteShell;
+        private System.Windows.Forms.TabPage tpConnections;
     }
 }
