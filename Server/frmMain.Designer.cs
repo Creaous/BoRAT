@@ -77,7 +77,7 @@ namespace BoRAT.Server
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lblPort = new System.Windows.Forms.Label();
+            this.bunifuCustomLabel4 = new System.Windows.Forms.Label();
             this.btnListen = new System.Windows.Forms.Button();
             this.Nport = new System.Windows.Forms.NumericUpDown();
             this.btnEncrypt = new System.Windows.Forms.Button();
@@ -93,7 +93,7 @@ namespace BoRAT.Server
             this.lblStatusRdp = new System.Windows.Forms.Label();
             this.lblStatusCmdShell = new System.Windows.Forms.Label();
             this.Logs = new System.Windows.Forms.RichTextBox();
-            this.lblCommand = new System.Windows.Forms.Label();
+            this.bunifuCustomLabel6 = new System.Windows.Forms.Label();
             this.txtCommand = new System.Windows.Forms.TextBox();
             this.PanelCmd = new System.Windows.Forms.Panel();
             this.listFileManager = new System.Windows.Forms.ListView();
@@ -102,7 +102,7 @@ namespace BoRAT.Server
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.lblStatusFileManager = new System.Windows.Forms.Label();
-            this.lblActivityErrorLog = new System.Windows.Forms.Label();
+            this.bunifuCustomLabel8 = new System.Windows.Forms.Label();
             this.LogsFileManager = new System.Windows.Forms.RichTextBox();
             this.PanelFileManager = new System.Windows.Forms.Panel();
             this.tcMain = new System.Windows.Forms.TabControl();
@@ -110,8 +110,6 @@ namespace BoRAT.Server
             this.tpRemoteShell = new System.Windows.Forms.TabPage();
             this.tpFileManager = new System.Windows.Forms.TabPage();
             this.tpRDP = new System.Windows.Forms.TabPage();
-            this.tpExperimental = new System.Windows.Forms.TabPage();
-            this.rtbLog = new System.Windows.Forms.RichTextBox();
             this.MenuClients.SuspendLayout();
             this.MenuFileManager.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -129,7 +127,6 @@ namespace BoRAT.Server
             this.tpRemoteShell.SuspendLayout();
             this.tpFileManager.SuspendLayout();
             this.tpRDP.SuspendLayout();
-            this.tpExperimental.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuClients
@@ -140,13 +137,13 @@ namespace BoRAT.Server
             this.selectToolStripMenuItem,
             this.runCmdShellToolStripMenuItem});
             this.MenuClients.Name = "MenuClients";
-            this.MenuClients.Size = new System.Drawing.Size(185, 48);
+            this.MenuClients.Size = new System.Drawing.Size(185, 70);
             // 
             // selectToolStripMenuItem
             // 
             this.selectToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
             this.selectToolStripMenuItem.Name = "selectToolStripMenuItem";
-            this.selectToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.selectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectToolStripMenuItem.Text = "Select";
             this.selectToolStripMenuItem.Click += new System.EventHandler(this.selectToolStripMenuItem_Click);
             // 
@@ -489,7 +486,7 @@ namespace BoRAT.Server
             "%CurrentPath%"});
             this.comboEPath.Location = new System.Drawing.Point(121, 143);
             this.comboEPath.Name = "comboEPath";
-            this.comboEPath.Size = new System.Drawing.Size(177, 21);
+            this.comboEPath.Size = new System.Drawing.Size(177, 22);
             this.comboEPath.TabIndex = 4;
             this.comboEPath.Text = "Select";
             // 
@@ -516,7 +513,7 @@ namespace BoRAT.Server
             this.PanelClients.BackColor = System.Drawing.Color.Transparent;
             this.PanelClients.Controls.Add(this.lblStatus);
             this.PanelClients.Controls.Add(this.listClients);
-            this.PanelClients.Controls.Add(this.lblPort);
+            this.PanelClients.Controls.Add(this.bunifuCustomLabel4);
             this.PanelClients.Controls.Add(this.btnListen);
             this.PanelClients.Controls.Add(this.Nport);
             this.PanelClients.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -588,16 +585,16 @@ namespace BoRAT.Server
             this.columnHeader10.Text = "Date/Time";
             this.columnHeader10.Width = 170;
             // 
-            // lblPort
+            // bunifuCustomLabel4
             // 
-            this.lblPort.AutoSize = true;
-            this.lblPort.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblPort.ForeColor = System.Drawing.Color.Black;
-            this.lblPort.Location = new System.Drawing.Point(5, 5);
-            this.lblPort.Name = "lblPort";
-            this.lblPort.Size = new System.Drawing.Size(34, 15);
-            this.lblPort.TabIndex = 3;
-            this.lblPort.Text = "Port:";
+            this.bunifuCustomLabel4.AutoSize = true;
+            this.bunifuCustomLabel4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.bunifuCustomLabel4.ForeColor = System.Drawing.Color.Black;
+            this.bunifuCustomLabel4.Location = new System.Drawing.Point(5, 5);
+            this.bunifuCustomLabel4.Name = "bunifuCustomLabel4";
+            this.bunifuCustomLabel4.Size = new System.Drawing.Size(34, 15);
+            this.bunifuCustomLabel4.TabIndex = 3;
+            this.bunifuCustomLabel4.Text = "Port:";
             // 
             // btnListen
             // 
@@ -712,11 +709,11 @@ namespace BoRAT.Server
             this.btnRdpStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRdpStop.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnRdpStop.ForeColor = System.Drawing.Color.Black;
-            this.btnRdpStop.Location = new System.Drawing.Point(98, 38);
+            this.btnRdpStop.Location = new System.Drawing.Point(98, 39);
             this.btnRdpStop.Name = "btnRdpStop";
             this.btnRdpStop.Size = new System.Drawing.Size(82, 30);
             this.btnRdpStop.TabIndex = 9;
-            this.btnRdpStop.Text = "Stop";
+            this.btnRdpStop.Text = "Pause";
             this.btnRdpStop.UseVisualStyleBackColor = false;
             this.btnRdpStop.Click += new System.EventHandler(this.btnRdpStop_Click);
             // 
@@ -742,7 +739,7 @@ namespace BoRAT.Server
             this.pBRdp.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pBRdp.Location = new System.Drawing.Point(186, 8);
             this.pBRdp.Name = "pBRdp";
-            this.pBRdp.Size = new System.Drawing.Size(769, 401);
+            this.pBRdp.Size = new System.Drawing.Size(769, 372);
             this.pBRdp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pBRdp.TabIndex = 6;
             this.pBRdp.TabStop = false;
@@ -780,16 +777,16 @@ namespace BoRAT.Server
             this.Logs.TabIndex = 4;
             this.Logs.Text = "";
             // 
-            // lblCommand
+            // bunifuCustomLabel6
             // 
-            this.lblCommand.AutoSize = true;
-            this.lblCommand.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblCommand.ForeColor = System.Drawing.Color.Black;
-            this.lblCommand.Location = new System.Drawing.Point(5, 363);
-            this.lblCommand.Name = "lblCommand";
-            this.lblCommand.Size = new System.Drawing.Size(66, 15);
-            this.lblCommand.TabIndex = 5;
-            this.lblCommand.Text = "Command:";
+            this.bunifuCustomLabel6.AutoSize = true;
+            this.bunifuCustomLabel6.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.bunifuCustomLabel6.ForeColor = System.Drawing.Color.Black;
+            this.bunifuCustomLabel6.Location = new System.Drawing.Point(5, 363);
+            this.bunifuCustomLabel6.Name = "bunifuCustomLabel6";
+            this.bunifuCustomLabel6.Size = new System.Drawing.Size(66, 15);
+            this.bunifuCustomLabel6.TabIndex = 5;
+            this.bunifuCustomLabel6.Text = "Command:";
             // 
             // txtCommand
             // 
@@ -804,7 +801,7 @@ namespace BoRAT.Server
             // PanelCmd
             // 
             this.PanelCmd.Controls.Add(this.txtCommand);
-            this.PanelCmd.Controls.Add(this.lblCommand);
+            this.PanelCmd.Controls.Add(this.bunifuCustomLabel6);
             this.PanelCmd.Controls.Add(this.Logs);
             this.PanelCmd.Controls.Add(this.lblStatusCmdShell);
             this.PanelCmd.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -864,16 +861,16 @@ namespace BoRAT.Server
             this.lblStatusFileManager.TabIndex = 4;
             this.lblStatusFileManager.Text = "Connection: No Active Session\r\nUsername: -";
             // 
-            // lblActivityErrorLog
+            // bunifuCustomLabel8
             // 
-            this.lblActivityErrorLog.AutoSize = true;
-            this.lblActivityErrorLog.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblActivityErrorLog.ForeColor = System.Drawing.Color.Black;
-            this.lblActivityErrorLog.Location = new System.Drawing.Point(0, 306);
-            this.lblActivityErrorLog.Name = "lblActivityErrorLog";
-            this.lblActivityErrorLog.Size = new System.Drawing.Size(109, 15);
-            this.lblActivityErrorLog.TabIndex = 5;
-            this.lblActivityErrorLog.Text = "Activity/Error Log:";
+            this.bunifuCustomLabel8.AutoSize = true;
+            this.bunifuCustomLabel8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.bunifuCustomLabel8.ForeColor = System.Drawing.Color.Black;
+            this.bunifuCustomLabel8.Location = new System.Drawing.Point(0, 306);
+            this.bunifuCustomLabel8.Name = "bunifuCustomLabel8";
+            this.bunifuCustomLabel8.Size = new System.Drawing.Size(109, 15);
+            this.bunifuCustomLabel8.TabIndex = 5;
+            this.bunifuCustomLabel8.Text = "Activity/Error Log:";
             // 
             // LogsFileManager
             // 
@@ -889,7 +886,7 @@ namespace BoRAT.Server
             // PanelFileManager
             // 
             this.PanelFileManager.Controls.Add(this.LogsFileManager);
-            this.PanelFileManager.Controls.Add(this.lblActivityErrorLog);
+            this.PanelFileManager.Controls.Add(this.bunifuCustomLabel8);
             this.PanelFileManager.Controls.Add(this.lblStatusFileManager);
             this.PanelFileManager.Controls.Add(this.listFileManager);
             this.PanelFileManager.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -905,7 +902,6 @@ namespace BoRAT.Server
             this.tcMain.Controls.Add(this.tpRemoteShell);
             this.tcMain.Controls.Add(this.tpFileManager);
             this.tcMain.Controls.Add(this.tpRDP);
-            this.tcMain.Controls.Add(this.tpExperimental);
             this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcMain.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.tcMain.Location = new System.Drawing.Point(0, 0);
@@ -958,25 +954,6 @@ namespace BoRAT.Server
             this.tpRDP.TabIndex = 0;
             this.tpRDP.Text = "Remote Desktop";
             // 
-            // tpExperimental
-            // 
-            this.tpExperimental.Controls.Add(this.rtbLog);
-            this.tpExperimental.Location = new System.Drawing.Point(4, 24);
-            this.tpExperimental.Name = "tpExperimental";
-            this.tpExperimental.Size = new System.Drawing.Size(966, 420);
-            this.tpExperimental.TabIndex = 5;
-            this.tpExperimental.Text = "Experimental";
-            this.tpExperimental.UseVisualStyleBackColor = true;
-            // 
-            // rtbLog
-            // 
-            this.rtbLog.Location = new System.Drawing.Point(8, 7);
-            this.rtbLog.Name = "rtbLog";
-            this.rtbLog.Size = new System.Drawing.Size(950, 405);
-            this.rtbLog.TabIndex = 1;
-            this.rtbLog.Text = "";
-            this.rtbLog.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
-            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 14F);
@@ -989,6 +966,7 @@ namespace BoRAT.Server
             this.Name = "frmMain";
             this.ShowIcon = false;
             this.Text = "BoRAT";
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.MenuClients.ResumeLayout(false);
             this.MenuFileManager.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
@@ -1013,7 +991,6 @@ namespace BoRAT.Server
             this.tpRemoteShell.ResumeLayout(false);
             this.tpFileManager.ResumeLayout(false);
             this.tpRDP.ResumeLayout(false);
-            this.tpExperimental.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1049,7 +1026,7 @@ namespace BoRAT.Server
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader10;
-        private System.Windows.Forms.Label lblPort;
+        private System.Windows.Forms.Label bunifuCustomLabel4;
         private System.Windows.Forms.Button btnListen;
         private System.Windows.Forms.NumericUpDown Nport;
         private System.Windows.Forms.GroupBox groupBox4;
@@ -1083,7 +1060,7 @@ namespace BoRAT.Server
         private System.Windows.Forms.Label lblStatusRdp;
         private System.Windows.Forms.Label lblStatusCmdShell;
         private System.Windows.Forms.RichTextBox Logs;
-        private System.Windows.Forms.Label lblCommand;
+        private System.Windows.Forms.Label bunifuCustomLabel6;
         private System.Windows.Forms.TextBox txtCommand;
         private System.Windows.Forms.Panel PanelCmd;
         private System.Windows.Forms.ListView listFileManager;
@@ -1092,7 +1069,7 @@ namespace BoRAT.Server
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.Label lblStatusFileManager;
-        private System.Windows.Forms.Label lblActivityErrorLog;
+        private System.Windows.Forms.Label bunifuCustomLabel8;
         private System.Windows.Forms.RichTextBox LogsFileManager;
         private System.Windows.Forms.Panel PanelFileManager;
         private System.Windows.Forms.TabControl tcMain;
@@ -1100,7 +1077,5 @@ namespace BoRAT.Server
         private System.Windows.Forms.TabPage tpFileManager;
         private System.Windows.Forms.TabPage tpRemoteShell;
         private System.Windows.Forms.TabPage tpConnections;
-        private System.Windows.Forms.TabPage tpExperimental;
-        private System.Windows.Forms.RichTextBox rtbLog;
     }
 }
