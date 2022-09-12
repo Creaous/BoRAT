@@ -31,7 +31,7 @@ namespace BoRAT.Server
             this.components = new System.ComponentModel.Container();
             this.MenuClients = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runCmdShellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runCommandShellToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuFileManager = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.drivesListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,11 +91,11 @@ namespace BoRAT.Server
             this.comboRdp = new System.Windows.Forms.ComboBox();
             this.pBRdp = new System.Windows.Forms.PictureBox();
             this.lblStatusRdp = new System.Windows.Forms.Label();
-            this.lblStatusCmdShell = new System.Windows.Forms.Label();
+            this.lblStatusCommandShell = new System.Windows.Forms.Label();
             this.Logs = new System.Windows.Forms.RichTextBox();
             this.bunifuCustomLabel6 = new System.Windows.Forms.Label();
             this.txtCommand = new System.Windows.Forms.TextBox();
-            this.PanelCmd = new System.Windows.Forms.Panel();
+            this.PanelCommand = new System.Windows.Forms.Panel();
             this.listFileManager = new System.Windows.Forms.ListView();
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -120,7 +120,7 @@ namespace BoRAT.Server
             this.groupBox4.SuspendLayout();
             this.PanelRdp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBRdp)).BeginInit();
-            this.PanelCmd.SuspendLayout();
+            this.PanelCommand.SuspendLayout();
             this.PanelFileManager.SuspendLayout();
             this.tcMain.SuspendLayout();
             this.tpConnections.SuspendLayout();
@@ -135,7 +135,7 @@ namespace BoRAT.Server
             this.MenuClients.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MenuClients.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectToolStripMenuItem,
-            this.runCmdShellToolStripMenuItem});
+            this.runCommandShellToolStripMenuItem});
             this.MenuClients.Name = "MenuClients";
             this.MenuClients.Size = new System.Drawing.Size(185, 70);
             // 
@@ -147,13 +147,13 @@ namespace BoRAT.Server
             this.selectToolStripMenuItem.Text = "Select";
             this.selectToolStripMenuItem.Click += new System.EventHandler(this.selectToolStripMenuItem_Click);
             // 
-            // runCmdShellToolStripMenuItem
+            // runCommandShellToolStripMenuItem
             // 
-            this.runCmdShellToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
-            this.runCmdShellToolStripMenuItem.Name = "runCmdShellToolStripMenuItem";
-            this.runCmdShellToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
-            this.runCmdShellToolStripMenuItem.Text = "Run Remote Shell";
-            this.runCmdShellToolStripMenuItem.Click += new System.EventHandler(this.runCmdShellToolStripMenuItem_Click);
+            this.runCommandShellToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.runCommandShellToolStripMenuItem.Name = "runCommandShellToolStripMenuItem";
+            this.runCommandShellToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.runCommandShellToolStripMenuItem.Text = "Run Remote Shell";
+            this.runCommandShellToolStripMenuItem.Click += new System.EventHandler(this.runCommandShellToolStripMenuItem_Click);
             // 
             // MenuFileManager
             // 
@@ -755,16 +755,16 @@ namespace BoRAT.Server
             this.lblStatusRdp.TabIndex = 5;
             this.lblStatusRdp.Text = "Connection: No Active Session\r\nUsername: -";
             // 
-            // lblStatusCmdShell
+            // lblStatusCommandShell
             // 
-            this.lblStatusCmdShell.AutoSize = true;
-            this.lblStatusCmdShell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblStatusCmdShell.ForeColor = System.Drawing.Color.Black;
-            this.lblStatusCmdShell.Location = new System.Drawing.Point(5, 5);
-            this.lblStatusCmdShell.Name = "lblStatusCmdShell";
-            this.lblStatusCmdShell.Size = new System.Drawing.Size(175, 30);
-            this.lblStatusCmdShell.TabIndex = 3;
-            this.lblStatusCmdShell.Text = "Connection: No Active Session\r\nUsername: -";
+            this.lblStatusCommandShell.AutoSize = true;
+            this.lblStatusCommandShell.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblStatusCommandShell.ForeColor = System.Drawing.Color.Black;
+            this.lblStatusCommandShell.Location = new System.Drawing.Point(5, 5);
+            this.lblStatusCommandShell.Name = "lblStatusCommandShell";
+            this.lblStatusCommandShell.Size = new System.Drawing.Size(175, 30);
+            this.lblStatusCommandShell.TabIndex = 3;
+            this.lblStatusCommandShell.Text = "Connection: No Active Session\r\nUsername: -";
             // 
             // Logs
             // 
@@ -798,18 +798,18 @@ namespace BoRAT.Server
             this.txtCommand.TabIndex = 6;
             this.txtCommand.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCommand_KeyDown);
             // 
-            // PanelCmd
+            // PanelCommand
             // 
-            this.PanelCmd.Controls.Add(this.txtCommand);
-            this.PanelCmd.Controls.Add(this.bunifuCustomLabel6);
-            this.PanelCmd.Controls.Add(this.Logs);
-            this.PanelCmd.Controls.Add(this.lblStatusCmdShell);
-            this.PanelCmd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PanelCmd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
-            this.PanelCmd.Location = new System.Drawing.Point(3, 3);
-            this.PanelCmd.Name = "PanelCmd";
-            this.PanelCmd.Size = new System.Drawing.Size(960, 414);
-            this.PanelCmd.TabIndex = 10;
+            this.PanelCommand.Controls.Add(this.txtCommand);
+            this.PanelCommand.Controls.Add(this.bunifuCustomLabel6);
+            this.PanelCommand.Controls.Add(this.Logs);
+            this.PanelCommand.Controls.Add(this.lblStatusCommandShell);
+            this.PanelCommand.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PanelCommand.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(183)))), ((int)(((byte)(96)))));
+            this.PanelCommand.Location = new System.Drawing.Point(3, 3);
+            this.PanelCommand.Name = "PanelCommand";
+            this.PanelCommand.Size = new System.Drawing.Size(960, 414);
+            this.PanelCommand.TabIndex = 10;
             // 
             // listFileManager
             // 
@@ -924,7 +924,7 @@ namespace BoRAT.Server
             // tpRemoteShell
             // 
             this.tpRemoteShell.BackColor = System.Drawing.SystemColors.Control;
-            this.tpRemoteShell.Controls.Add(this.PanelCmd);
+            this.tpRemoteShell.Controls.Add(this.PanelCommand);
             this.tpRemoteShell.Location = new System.Drawing.Point(4, 24);
             this.tpRemoteShell.Name = "tpRemoteShell";
             this.tpRemoteShell.Padding = new System.Windows.Forms.Padding(3);
@@ -982,8 +982,8 @@ namespace BoRAT.Server
             this.PanelRdp.ResumeLayout(false);
             this.PanelRdp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pBRdp)).EndInit();
-            this.PanelCmd.ResumeLayout(false);
-            this.PanelCmd.PerformLayout();
+            this.PanelCommand.ResumeLayout(false);
+            this.PanelCommand.PerformLayout();
             this.PanelFileManager.ResumeLayout(false);
             this.PanelFileManager.PerformLayout();
             this.tcMain.ResumeLayout(false);
@@ -998,7 +998,7 @@ namespace BoRAT.Server
         #endregion
         private System.Windows.Forms.ContextMenuStrip MenuClients;
         private System.Windows.Forms.ToolStripMenuItem selectToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runCmdShellToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runCommandShellToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip MenuFileManager;
         private System.Windows.Forms.ToolStripMenuItem drivesListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterToolStripMenuItem;
@@ -1058,11 +1058,11 @@ namespace BoRAT.Server
         private System.Windows.Forms.ComboBox comboRdp;
         private System.Windows.Forms.PictureBox pBRdp;
         private System.Windows.Forms.Label lblStatusRdp;
-        private System.Windows.Forms.Label lblStatusCmdShell;
+        private System.Windows.Forms.Label lblStatusCommandShell;
         private System.Windows.Forms.RichTextBox Logs;
         private System.Windows.Forms.Label bunifuCustomLabel6;
         private System.Windows.Forms.TextBox txtCommand;
-        private System.Windows.Forms.Panel PanelCmd;
+        private System.Windows.Forms.Panel PanelCommand;
         private System.Windows.Forms.ListView listFileManager;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.ColumnHeader columnHeader7;
