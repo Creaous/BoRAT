@@ -110,6 +110,11 @@ namespace BoRAT.Server
             this.tpRemoteShell = new System.Windows.Forms.TabPage();
             this.tpFileManager = new System.Windows.Forms.TabPage();
             this.tpRDP = new System.Windows.Forms.TabPage();
+            this.tpExperimental = new System.Windows.Forms.TabPage();
+            this.tpAbout = new System.Windows.Forms.TabPage();
+            this.btnSuicide = new System.Windows.Forms.Button();
+            this.rtbLog = new System.Windows.Forms.RichTextBox();
+            this.btnAddToStartup = new System.Windows.Forms.Button();
             this.MenuClients.SuspendLayout();
             this.MenuFileManager.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -127,6 +132,7 @@ namespace BoRAT.Server
             this.tpRemoteShell.SuspendLayout();
             this.tpFileManager.SuspendLayout();
             this.tpRDP.SuspendLayout();
+            this.tpExperimental.SuspendLayout();
             this.SuspendLayout();
             // 
             // MenuClients
@@ -137,13 +143,13 @@ namespace BoRAT.Server
             this.selectToolStripMenuItem,
             this.runCommandShellToolStripMenuItem});
             this.MenuClients.Name = "MenuClients";
-            this.MenuClients.Size = new System.Drawing.Size(185, 70);
+            this.MenuClients.Size = new System.Drawing.Size(185, 48);
             // 
             // selectToolStripMenuItem
             // 
             this.selectToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
             this.selectToolStripMenuItem.Name = "selectToolStripMenuItem";
-            this.selectToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.selectToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.selectToolStripMenuItem.Text = "Select";
             this.selectToolStripMenuItem.Click += new System.EventHandler(this.selectToolStripMenuItem_Click);
             // 
@@ -902,6 +908,8 @@ namespace BoRAT.Server
             this.tcMain.Controls.Add(this.tpRemoteShell);
             this.tcMain.Controls.Add(this.tpFileManager);
             this.tcMain.Controls.Add(this.tpRDP);
+            this.tcMain.Controls.Add(this.tpExperimental);
+            this.tcMain.Controls.Add(this.tpAbout);
             this.tcMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tcMain.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.tcMain.Location = new System.Drawing.Point(0, 0);
@@ -954,6 +962,55 @@ namespace BoRAT.Server
             this.tpRDP.TabIndex = 0;
             this.tpRDP.Text = "Remote Desktop";
             // 
+            // tpExperimental
+            // 
+            this.tpExperimental.Controls.Add(this.btnAddToStartup);
+            this.tpExperimental.Controls.Add(this.rtbLog);
+            this.tpExperimental.Controls.Add(this.btnSuicide);
+            this.tpExperimental.Location = new System.Drawing.Point(4, 24);
+            this.tpExperimental.Name = "tpExperimental";
+            this.tpExperimental.Size = new System.Drawing.Size(966, 420);
+            this.tpExperimental.TabIndex = 5;
+            this.tpExperimental.Text = "Experimental";
+            this.tpExperimental.UseVisualStyleBackColor = true;
+            // 
+            // tpAbout
+            // 
+            this.tpAbout.Location = new System.Drawing.Point(4, 24);
+            this.tpAbout.Name = "tpAbout";
+            this.tpAbout.Size = new System.Drawing.Size(966, 420);
+            this.tpAbout.TabIndex = 6;
+            this.tpAbout.Text = "About";
+            this.tpAbout.UseVisualStyleBackColor = true;
+            // 
+            // btnSuicide
+            // 
+            this.btnSuicide.Location = new System.Drawing.Point(3, 3);
+            this.btnSuicide.Name = "btnSuicide";
+            this.btnSuicide.Size = new System.Drawing.Size(75, 23);
+            this.btnSuicide.TabIndex = 0;
+            this.btnSuicide.Text = "Suicide";
+            this.btnSuicide.UseVisualStyleBackColor = true;
+            this.btnSuicide.Click += new System.EventHandler(this.btnSuicide_Click);
+            // 
+            // rtbLog
+            // 
+            this.rtbLog.Location = new System.Drawing.Point(3, 32);
+            this.rtbLog.Name = "rtbLog";
+            this.rtbLog.Size = new System.Drawing.Size(960, 385);
+            this.rtbLog.TabIndex = 1;
+            this.rtbLog.Text = "";
+            // 
+            // btnAddToStartup
+            // 
+            this.btnAddToStartup.Location = new System.Drawing.Point(80, 3);
+            this.btnAddToStartup.Name = "btnAddToStartup";
+            this.btnAddToStartup.Size = new System.Drawing.Size(104, 23);
+            this.btnAddToStartup.TabIndex = 2;
+            this.btnAddToStartup.Text = "Add to Startup";
+            this.btnAddToStartup.UseVisualStyleBackColor = true;
+            this.btnAddToStartup.Click += new System.EventHandler(this.btnAddToStartup_Click);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 14F);
@@ -991,6 +1048,7 @@ namespace BoRAT.Server
             this.tpRemoteShell.ResumeLayout(false);
             this.tpFileManager.ResumeLayout(false);
             this.tpRDP.ResumeLayout(false);
+            this.tpExperimental.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1077,5 +1135,10 @@ namespace BoRAT.Server
         private System.Windows.Forms.TabPage tpFileManager;
         private System.Windows.Forms.TabPage tpRemoteShell;
         private System.Windows.Forms.TabPage tpConnections;
+        private System.Windows.Forms.TabPage tpExperimental;
+        private System.Windows.Forms.Button btnAddToStartup;
+        private System.Windows.Forms.RichTextBox rtbLog;
+        private System.Windows.Forms.Button btnSuicide;
+        private System.Windows.Forms.TabPage tpAbout;
     }
 }

