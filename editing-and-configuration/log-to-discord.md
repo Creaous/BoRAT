@@ -1,6 +1,6 @@
 # Log to Discord
 
-In BoRAT, we log to Discord using Requestbin which is now known as Pipedream.
+In BoRAT, we log to Discord using RequestBin which is now known as Pipedream.
 
 ### Creating a Pipedream Account
 
