@@ -11,7 +11,7 @@ In BoRAT, we log to Discord using Requestbin which is now known as Pipedream.
 5. `Click Save and continue` and `Generate Test Event`.
 6. Click Continue and search for `Discord Webhook`.
 7. Select the normal `Send Message` action.
-8. For the `Message` content use the `Pipedream Configuration` below.
+8. For the `Message` content use the [`Pipedream Configuration`](log-to-discord.md#pipedream-configuration) below.
 
 ### Pipedream Configuration
 
