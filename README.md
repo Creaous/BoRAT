@@ -10,7 +10,11 @@ A remote administration tool (RAT) may be illegal depending on where you live. C
 Our main purpose for this RAT is to be used in scenarios with scam call centers.
 
 ## Features
-- 
+- Remote Desktop
+- File Manager
+- Copy to Startup
+- "Suicide"
+- Scripts System - WIP
 
 ## Compiling
 ### Requirements
