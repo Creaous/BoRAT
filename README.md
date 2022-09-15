@@ -1,4 +1,4 @@
-# Welcome
+# Welcome to BoRAT
 
 An open-source remote administration tool
 
@@ -16,7 +16,11 @@ Our main purpose for this RAT is to be used in scenarios with scam call centers.
 
 ### Features
 
-*
+* Remote Desktop
+* File Manager
+* Copy to Startup
+* "Suicide"
+* Scripts System - WIP
 
 ### Compiling
 
